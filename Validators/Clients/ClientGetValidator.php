@@ -13,6 +13,7 @@ namespace Cookbook\OAuth2\Validators\Clients;
 use Cookbook\Core\Bus\RepositoryCommand;
 use Cookbook\Core\Validation\Validator;
 use Illuminate\Support\Facades\Config;
+use Cookbook\Core\Exceptions\BadRequestException;
 
 
 /**

@@ -39,7 +39,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 
 		$this->registerVerifier();
 
-		$this->registerMiddleware();
+		
 	}
 
 	/**
@@ -52,6 +52,14 @@ class OAuth2ServiceProvider extends ServiceProvider {
 		$this->publishes([
 			__DIR__.'/database/migrations' => database_path('/migrations'),
 		]);
+
+		$source = realpath(__DIR__.'/config/oauth2.php');
+
+        $this->mergeConfigFrom($source, 'oauth2');
+
+		$this->addMiddleware();
+
+		include __DIR__ . '/Http/routes.php';
 	}
 
 	/**
@@ -59,7 +67,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 	 * 
 	 * @return void
 	 */
-	protected function registerMiddleware()
+	protected function addMiddleware()
 	{
 		$this->app['router']->middleware('oauth', \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class);
 		$this->app['router']->middleware('oauth-user', \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class);
