@@ -91,29 +91,21 @@ class OAuth2ServiceProvider extends ServiceProvider {
 	protected function registerServiceProviders()
 	{
 
-		// // Repositories
-		// // -----------------------------------------------------------------------------
-		// $this->app->register('Cookbook\OAuth\Repositories\RepositoriesServiceProvider');
+		// Repositories
+		// -----------------------------------------------------------------------------
+		$this->app->register('Cookbook\OAuth2\Repositories\RepositoriesServiceProvider');
 		
-		// // Handlers
-		// // -----------------------------------------------------------------------------
-		// $this->app->register('Cookbook\OAuth\Handlers\HandlersServiceProvider');
+		// Handlers
+		// -----------------------------------------------------------------------------
+		$this->app->register('Cookbook\OAuth2\Handlers\HandlersServiceProvider');
 
-		// // Validators
-		// // -----------------------------------------------------------------------------
-		// $this->app->register('Cookbook\OAuth\Validators\ValidatorsServiceProvider');
+		// Validators
+		// -----------------------------------------------------------------------------
+		$this->app->register('Cookbook\OAuth2\Validators\ValidatorsServiceProvider');
 
-		// // Commands
-		// // -----------------------------------------------------------------------------
-		// $this->app->register('Cookbook\OAuth\Commands\CommandsServiceProvider');
-
-		// // Servers
-		// // -----------------------------------------------------------------------------
-		// $this->app->register('Cookbook\OAuth\Servers\ServersServiceProvider');
-
-		// // HTTP
-		// // -----------------------------------------------------------------------------
-		// $this->app->register('Cookbook\OAuth\Http\HttpServiceProvider');
+		// Commands
+		// -----------------------------------------------------------------------------
+		$this->app->register('Cookbook\OAuth2\Commands\CommandsServiceProvider');
 
 	}
 
