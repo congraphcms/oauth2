@@ -4,11 +4,12 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Debug\Dumper;
 
 require_once(__DIR__ . '/../database/seeders/UserTestDbSeeder.php');
-require_once(__DIR__ . '/../database/seeders/ScopeTestDbSeeder.php');
 require_once(__DIR__ . '/../database/seeders/ClientTestDbSeeder.php');
+require_once(__DIR__ . '/../database/seeders/RoleTestDbSeeder.php');
+require_once(__DIR__ . '/../database/seeders/ScopeTestDbSeeder.php');
 require_once(__DIR__ . '/../database/seeders/ClearDB.php');
 
-class ClientTest extends Orchestra\Testbench\TestCase
+class RoleTest extends Orchestra\Testbench\TestCase
 {
 
 	public function setUp()
@@ -25,14 +26,22 @@ class ClientTest extends Orchestra\Testbench\TestCase
 			'--realpath' => realpath(__DIR__.'/../../vendor/cookbook/users/database/migrations'),
 		]);
 
+		$this->artisan('migrate', [
+			'--database' => 'testbench',
+			'--realpath' => realpath(__DIR__.'/../../database/migrations'),
+		]);
+
 		$this->artisan('db:seed', [
 			'--class' => 'UserTestDbSeeder'
+		]);
+		$this->artisan('db:seed', [
+			'--class' => 'ClientTestDbSeeder'
 		]);
 		$this->artisan('db:seed', [
 			'--class' => 'ScopeTestDbSeeder'
 		]);
 		$this->artisan('db:seed', [
-			'--class' => 'ClientTestDbSeeder'
+			'--class' => 'RoleTestDbSeeder'
 		]);
 
 		$this->d = new Dumper();
@@ -75,42 +84,39 @@ class ClientTest extends Orchestra\Testbench\TestCase
 	protected function getPackageProviders($app)
 	{
 		return [
+			'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
+			'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider',
 			'Cookbook\OAuth2\OAuth2ServiceProvider', 
 			'Cookbook\Users\UsersServiceProvider', 
 			'Cookbook\Core\CoreServiceProvider',
-			'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
-			'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider'
 		];
 	}
 
-	public function testCreateClient()
+	public function testCreateRole()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
 		$params = [
-			'name' => 'Jane\'s Mobile App',
-			'scopes' => ['manage_entities'],
-			'grants' => ['client_credentials']
+			'name' => 'Project Manager',
+			'description' => 'Edits entities of only one project.',
+			'scopes' => ['manage_users', 'manage_clients', 'manage_content_model', 'manage_entities']
 		];
 
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 		
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientCreateCommand($params));
+		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleCreateCommand($params));
 		
 		$this->d->dump($result->toArray());
-		$this->assertEquals('Jane\'s Mobile App', $result->name);
-		$this->assertEquals(40, strlen($result->id));
-		$this->assertEquals(40, strlen($result->secret));
+		$this->assertEquals('Project Manager', $result->name);
+		$this->assertEquals('Edits entities of only one project.', $result->description);
 		
-		$this->seeInDatabase('oauth_clients', ['id' => $result->id, 'secret' => $result->secret, 'name' => 'Jane\'s Mobile App']);
-		$this->seeInDatabase('oauth_client_scopes', ['client_id' => $result->id, 'scope_id' => 'manage_entities']);
-		$this->seeInDatabase('oauth_client_grants', ['client_id' => $result->id, 'grant_id' => 'client_credentials']);
+		$this->seeInDatabase('roles', ['id' => $result->id, 'name' => $result->name, 'description' => $result->description]);
 	}
 
 
-	public function testUpdateClient()
+	public function testUpdateRole()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
@@ -118,40 +124,38 @@ class ClientTest extends Orchestra\Testbench\TestCase
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
 		$params = [
-			'name' => 'Margaret\'s App',
-			'scopes' => ['manage_content_model'],
-			'grants' => ['client_credentials']
+			'name' => 'Content Editor',
+			'scopes' => ['manage_content_model']
 		];
 		
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientUpdateCommand($params, 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
+		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleUpdateCommand($params, 2));
 		
 		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
-		$this->assertTrue(is_string($result->id));
-		$this->assertEquals('iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR', $result->id);
-		$this->assertEquals('Margaret\'s App', $result->name);
+		$this->assertEquals(2, $result->id);
+		$this->assertEquals('Content Editor', $result->name);
+		$this->assertEquals(['manage_content_model'], $result->scopes);
 
-		$this->seeInDatabase('oauth_clients', ['id' => 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR', 'name' => 'Margaret\'s App']);
-		$this->seeInDatabase('oauth_client_scopes', ['client_id' => $result->id, 'scope_id' => 'manage_content_model']);
-		$this->seeInDatabase('oauth_client_grants', ['client_id' => $result->id, 'grant_id' => 'client_credentials']);
-		$this->dontSeeInDatabase('oauth_client_scopes', ['client_id' => $result->id, 'scope_id' => 'manage_entities']);
-		$this->dontSeeInDatabase('oauth_client_grants', ['client_id' => $result->id, 'grant_id' => 'password']);
+		$this->seeInDatabase('roles', ['id' => 2, 'name' => 'Content Editor']);
+		$this->seeInDatabase('role_scopes', ['role_id' => 2, 'scope_id' => 'manage_content_model']);
+		$this->dontSeeInDatabase('role_scopes', ['role_id' => 2, 'scope_id' => 'manage_entities']);
 		
 		$this->d->dump($result->toArray());
 	}
 
 
-	public function testDeleteClient()
+	public function testDeleteRole()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientDeleteCommand([], 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
+		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleDeleteCommand([], 3));
 
-		$this->assertEquals('iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR', $result);
+		$this->assertEquals(3, $result);
 		$this->d->dump($result);
-		$this->dontSeeInDatabase('oauth_clients', ['id' => 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR']);
+		$this->dontSeeInDatabase('roles', ['id' => 3]);
+		$this->dontSeeInDatabase('role_scopes', ['role_id' => 3, 'scope_id' => 'manage_clients']);
 	}
 
 	/**
@@ -164,10 +168,10 @@ class ClientTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientDeleteCommand([], '123'));
+		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleDeleteCommand([], 123));
 	}
 	
-	public function testFetchClient()
+	public function testFetchRole()
 	{
 
 		fwrite(STDOUT, __METHOD__ . "\n");
@@ -175,28 +179,28 @@ class ClientTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientFetchCommand([], 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
+		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleFetchCommand([], 3));
 
 		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
-		$this->assertTrue(is_string($result->id));
-		$this->assertEquals('iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR', $result->id);
-		$this->assertEquals('Test Client', $result->name);
+		$this->assertEquals(3, $result->id);
+		$this->assertEquals('Developer', $result->name);
+		$this->assertEquals(['manage_clients'], $result->scopes);
 		$this->d->dump($result->toArray());
 		
 
 	}
 
 	
-	public function testGetConsumers()
+	public function testGetRoles()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientGetCommand([]));
+		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleGetCommand([]));
 
 		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Collection);
-		$this->assertEquals(count($result), 1);
+		$this->assertEquals(count($result), 3);
 		$this->d->dump($result->toArray());
 
 	}

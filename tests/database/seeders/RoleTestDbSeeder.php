@@ -12,7 +12,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 /**
- * ClientTestDbSeeder
+ * RoleTestDbSeeder
  * 
  * Seeds Database with needed entries before tests
  * 
@@ -25,65 +25,92 @@ use Illuminate\Support\Facades\DB;
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */
-class ClientTestDbSeeder extends Seeder {
+class RoleTestDbSeeder extends Seeder {
 
 	public function run()
 	{
-		DB::table('oauth_clients')->delete();
-		DB::table('oauth_clients')->insert([
+		DB::table('roles')->truncate();
+		DB::table('roles')->insert([
 			[
-				'id' => 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR',
-				'secret' => '3wMlLnCBONHSlrxUJESPm1VwF9kBnHEGcCFt8iVR',
-				'name' => 'Test Client',
-				'created_at' => date("Y-m-d H:i:s"),
-				'updated_at' => date("Y-m-d H:i:s")
-			]
-		]);
-
-		DB::table('oauth_grants')->delete();
-		DB::table('oauth_grants')->insert([
-			[
-				'id' => 'password',
+				'name' => 'Administrator',
+				'description' => 'Can manage all.',
 				'created_at' => date("Y-m-d H:i:s"),
 				'updated_at' => date("Y-m-d H:i:s")
 			],
 			[
-				'id' => 'client_credentials',
+				'name' => 'Editor',
+				'description' => 'Can edit only entities.',
+				'created_at' => date("Y-m-d H:i:s"),
+				'updated_at' => date("Y-m-d H:i:s")
+			],
+			[
+				'name' => 'Developer',
+				'description' => 'Can edit only clients and API keys.',
 				'created_at' => date("Y-m-d H:i:s"),
 				'updated_at' => date("Y-m-d H:i:s")
 			]
 		]);
 
-		DB::table('oauth_client_scopes')->truncate();
-		DB::table('oauth_client_scopes')->insert([
+		DB::table('role_scopes')->truncate();
+		DB::table('role_scopes')->insert([
 			[
-				'client_id' => 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR',
+				'role_id' => 1,
+				'scope_id' => 'manage_users',
+				'created_at' => date("Y-m-d H:i:s"),
+				'updated_at' => date("Y-m-d H:i:s")
+			],
+			[
+				'role_id' => 1,
+				'scope_id' => 'manage_clients',
+				'created_at' => date("Y-m-d H:i:s"),
+				'updated_at' => date("Y-m-d H:i:s")
+			],
+			[
+				'role_id' => 1,
 				'scope_id' => 'manage_content_model',
 				'created_at' => date("Y-m-d H:i:s"),
 				'updated_at' => date("Y-m-d H:i:s")
 			],
 			[
-				'client_id' => 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR',
+				'role_id' => 1,
 				'scope_id' => 'manage_entities',
 				'created_at' => date("Y-m-d H:i:s"),
 				'updated_at' => date("Y-m-d H:i:s")
 			],
 			[
-				'client_id' => 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR',
-				'scope_id' => 'manage_users',
+				'role_id' => 2,
+				'scope_id' => 'manage_entities',
 				'created_at' => date("Y-m-d H:i:s"),
 				'updated_at' => date("Y-m-d H:i:s")
-			]
+			],
+			[
+				'role_id' => 3,
+				'scope_id' => 'manage_clients',
+				'created_at' => date("Y-m-d H:i:s"),
+				'updated_at' => date("Y-m-d H:i:s")
+			],
 		]);
 
-		DB::table('oauth_client_grants')->truncate();
-		DB::table('oauth_client_grants')->insert([
+		DB::table('user_roles')->truncate();
+		DB::table('user_roles')->insert([
 			[
-				'client_id' => 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR',
-				'grant_id' => 'password',
+				'user_id' => 1,
+				'role_id' => 1,
 				'created_at' => date("Y-m-d H:i:s"),
 				'updated_at' => date("Y-m-d H:i:s")
-			]
+			],
+			[
+				'user_id' => 2,
+				'role_id' => 2,
+				'created_at' => date("Y-m-d H:i:s"),
+				'updated_at' => date("Y-m-d H:i:s")
+			],
+			[
+				'user_id' => 2,
+				'role_id' => 3,
+				'created_at' => date("Y-m-d H:i:s"),
+				'updated_at' => date("Y-m-d H:i:s")
+			],
 		]);
 	}
 

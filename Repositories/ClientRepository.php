@@ -47,7 +47,7 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryCon
 //
 
 	/**
-	 * Create new UserRepository
+	 * Create new ClientRepository
 	 *
 	 * @param Illuminate\Database\Connection $db
 	 *
@@ -98,8 +98,62 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryCon
 
 		$model['created_at'] = $model['updated_at'] = Carbon::now('UTC')->toDateTimeString();
 
+		// get scopes from model if there are any
+		$scopes = [];
+		if(!empty($model['scopes']) && is_array($model['scopes']))
+		{
+			$scopes = $model['scopes'];
+		}
+
+		// unset scopes from model 
+		// for client insertation
+		unset($model['scopes']);
+
+		// get grants from model if there are any
+		$grants = [];
+		if(!empty($model['grants']) && is_array($model['grants']))
+		{
+			$grants = $model['grants'];
+		}
+
+		// unset grants from model 
+		// for client insertation
+		unset($model['grants']);
+
 		// insert client in database
 		$this->db->table($this->table)->insert($model);
+
+		$clientScopeParams = [];
+
+		// set relation to role in all scopes
+		for($i = 0; $i < count($scopes); $i++)
+		{
+			$clientScopeParam = [];
+			$clientScopeParam['client_id'] = $model['id'];
+			$clientScopeParam['scope_id'] = $scopes[$i];
+			$clientScopeParam['created_at'] = $clientScopeParam['updated_at'] = Carbon::now('UTC')->toDateTimeString();
+			$clientScopeParams[] = $clientScopeParam;
+		}
+
+		// update all scopes for client
+		$this->updateClientScopes($clientScopeParams, $model['id']);
+
+		$clientGrantParams = [];
+
+		// set relation to role in all grants
+		for($i = 0; $i < count($grants); $i++)
+		{
+			$clientGrantParam = [];
+			$clientGrantParam['client_id'] = $model['id'];
+			$clientGrantParam['grant_id'] = $grants[$i];
+			$clientGrantParam['created_at'] = $clientGrantParam['updated_at'] = Carbon::now('UTC')->toDateTimeString();
+			$clientGrantParams[] = $clientGrantParam;
+		}
+
+		// update all scopes for client
+		$this->updateClientGrants($clientGrantParams, $model['id']);
+
+
 		// get client
 		$client = $this->fetch($model['id']);
 
@@ -130,15 +184,112 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryCon
 			throw new NotFoundException(['There is no client with that ID.']);
 		}
 
+		// get scopes from model if there are any
+		$scopes = false;
+		if(!empty($model['scopes']) && is_array($model['scopes']))
+		{
+			$scopes = $model['scopes'];
+		}
+		
+		// unset scopes from model 
+		// for client update
+		unset($model['scopes']);
+
+		// get grants from model if there are any
+		$grants = false;
+		if(!empty($model['grants']) && is_array($model['grants']))
+		{
+			$grants = $model['grants'];
+		}
+		
+		// unset grants from model 
+		// for client update
+		unset($model['grants']);
+
 		$model['updated_at'] = Carbon::now('UTC')->toDateTimeString();
 
 		$this->db->table($this->table)->where('id', '=', $id)->update($model);
+
+		if($scopes !== false) {
+			$clientScopeParams = [];
+
+			// set relation to role in all scopes
+			for($i = 0; $i < count($scopes); $i++)
+			{
+				$clientScopeParam = [];
+				$clientScopeParam['client_id'] = $id;
+				$clientScopeParam['scope_id'] = $scopes[$i];
+				$clientScopeParam['created_at'] = $clientScopeParam['updated_at'] = Carbon::now('UTC')->toDateTimeString();
+				$clientScopeParams[] = $clientScopeParam;
+			}
+
+			// update all scopes for role
+			$this->updateClientScopes($clientScopeParams, $id);
+		}
+
+		if($grants !== false) {
+			$clientGrantParams = [];
+
+			// set relation to role in all grants
+			for($i = 0; $i < count($grants); $i++)
+			{
+				$clientGrantParam = [];
+				$clientGrantParam['client_id'] = $id;
+				$clientGrantParam['grant_id'] = $grants[$i];
+				$clientGrantParam['created_at'] = $clientGrantParam['updated_at'] = Carbon::now('UTC')->toDateTimeString();
+				$clientGrantParams[] = $clientGrantParam;
+			}
+
+			// update all grants for role
+			$this->updateClientGrants($clientGrantParams, $id);
+		}
 
 		Trunk::forgetType('client');
 		$client = $this->fetch($id);
 
 		// and return client
 		return $client;
+	}
+
+	/**
+	 * Updates all scopes in array
+	 * 
+	 * @param array $clientScopes - new params for client scopes
+	 * @param array $clientId (optional) - ID of client
+	 * 
+	 * @return boolean
+	 */
+	protected function updateClientScopes(array $clientScopes, $clientId)
+	{
+
+		$this->db->table('oauth_client_scopes')
+			 ->where('client_id', '=', $clientId)
+			 ->delete();
+
+		foreach ($clientScopes as $key => $params) {
+			// if option is new - insert
+			$clientScopeId = $this->db->table('oauth_client_scopes')->insertGetId($params);
+		}
+	}
+
+	/**
+	 * Updates all grants in array
+	 * 
+	 * @param array $clientGrants - new params for client grants
+	 * @param array $clientId (optional) - ID of client
+	 * 
+	 * @return boolean
+	 */
+	protected function updateClientGrants(array $clientGrants, $clientId)
+	{
+
+		$this->db->table('oauth_client_grants')
+			 ->where('client_id', '=', $clientId)
+			 ->delete();
+
+		foreach ($clientGrants as $key => $params) {
+			$clientGrantId = $this->db->table('oauth_client_grants')->insertGetId($params);
+		}
 	}
 
 	/**
@@ -206,6 +357,26 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryCon
 			throw new NotFoundException(['There is no client with that ID.']);
 		}
 
+		$scopes = $this->db->table('oauth_client_scopes')
+							->where('client_id', '=', $id)
+							->get();
+
+		$client->scopes = [];
+		foreach ($scopes as $scope) 
+		{
+			$client->scopes[] = $scope->scope_id;
+		}
+
+		$grants = $this->db->table('oauth_client_grants')
+							->where('client_id', '=', $id)
+							->get();
+
+		$client->grants = [];
+		foreach ($grants as $grant) 
+		{
+			$client->grants[] = $grant->grant_id;
+		}
+
 		$client->type = $this->type;
 
 		$timezone = (Config::get('app.timezone'))?Config::get('app.timezone'):'UTC';
@@ -259,14 +430,63 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryCon
 		if (! $clients) {
 			$clients = [];
 		}
-		
+
+		$clientIds = [];
+
 		foreach ($clients as &$client) {
 			$client->type = $this->type;
 
 			$timezone = (Config::get('app.timezone'))?Config::get('app.timezone'):'UTC';
 			$client->created_at = Carbon::parse($client->created_at)->tz($timezone);
 			$client->updated_at = Carbon::parse($client->updated_at)->tz($timezone);
+
+			$clientIds[] = $client->id;
+			$client->scopes = [];
+			$client->grants = [];
 		}
+
+		$scopes = [];
+		
+		if( ! empty($clientIds) )
+		{
+			$scopes = $this->db->table('oauth_client_scopes')
+							->whereIn('client_id', $clientIds)
+							->get();
+		}
+		
+		foreach ($scopes as $scope) 
+		{
+			foreach ($clients as &$client)
+			{
+				if($client->id == $scope->client_id)
+				{
+					$client->scopes[] = $scope->scope_id;
+					break;
+				}
+			}
+		}
+		
+		$grants = [];
+		
+		if( ! empty($clientIds) )
+		{
+			$grants = $this->db->table('oauth_client_grants')
+							->whereIn('client_id', $clientIds)
+							->get();
+		}
+		
+		foreach ($grants as $grant) 
+		{
+			foreach ($clients as &$client)
+			{
+				if($client->id == $grant->client_id)
+				{
+					$client->grants[] = $grant->grant_id;
+					break;
+				}
+			}
+		}
+		
 
 		$result = new Collection($clients);
 		

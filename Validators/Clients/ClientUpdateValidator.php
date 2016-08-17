@@ -10,6 +10,7 @@
 
 namespace Cookbook\OAuth2\Validators\Clients;
 
+use Cookbook\Contracts\OAuth2\ScopeRepositoryContract;
 use Cookbook\Core\Bus\RepositoryCommand;
 use Cookbook\Core\Validation\Validator;
 use Illuminate\Support\Facades\Config;
@@ -39,16 +40,32 @@ class ClientUpdateValidator extends Validator
 	protected $rules;
 
 	/**
+	 * Scope repository
+	 *
+	 * @var Cookbook\Contracts\OAuth2\ScopeRepositoryContract
+	 */
+	protected $scopeRepository;
+
+	/**
+	 * List of available grant types
+	 *
+	 * @var array
+	 */
+	protected $availableGrants = ['password', 'client_credentials'];
+
+	/**
 	 * Create new ClientUpdateValidator
 	 * 
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(ScopeRepositoryContract $scopeRepository)
 	{
-
+		$this->scopeRepository = $scopeRepository;
 
 		$this->rules = [
-			'name'					=> 'sometimes|max:150'
+			'name'					=> 'sometimes|max:150',
+			'scopes'				=> 'sometimes|array',
+			'grants'				=> 'sometimes|array'
 		];
 
 		parent::__construct();
@@ -71,6 +88,43 @@ class ClientUpdateValidator extends Validator
 	{
 
 		$this->validateParams($command->params, $this->rules, true);
+
+		if( $this->exception->hasErrors() )
+		{
+			throw $this->exception;
+		}
+
+		if(isset($command->params['grants']))
+		{
+			foreach ($command->params['grants'] as $grant)
+			{
+				if(!in_array($grant, $this->availableGrants)) {
+					$this->exception->addErrors(['grants' => 'Grant \''.$grant.'\' isn\'t allowed.']);
+				}
+			}
+		}
+		
+		if(!isset($command->params['scopes'])) {
+			return;
+		}
+
+		$scopes = $this->scopeRepository->getAll();
+
+		foreach ($command->params['scopes'] as $scope)
+		{	
+			$valid = false;
+			foreach ($scopes as $validScope)
+			{
+				if($validScope->id == $scope)
+				{
+					$valid = true;
+					break;
+				}
+			}
+			if(!$valid) {
+				$this->exception->addErrors(['scopes' => 'Scope \''.$scope.'\' doesn\'t exist.']);
+			}
+		}
 
 		if( $this->exception->hasErrors() )
 		{

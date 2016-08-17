@@ -13,7 +13,8 @@
     "require": {
         "php": ">=5.5.9",
         "lucadegasperi/oauth2-server-laravel": "5.1.*",
-        "cookbook/users": "dev-master"
+        "cookbook/users": "dev-master",
+        "doctrine/dbal": "*"
     },
 
     "repositories": [

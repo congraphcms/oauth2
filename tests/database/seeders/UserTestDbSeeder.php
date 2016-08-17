@@ -38,6 +38,14 @@ class UserTestDbSeeder extends Seeder {
 				'password' => '$2y$10$RwECgIpcFIb52MbTKCsFde0/vhsuLsaEWItcXKTWCaLh3beZoiWjG',
 				'created_at' => date("Y-m-d H:i:s"),
 				'updated_at' => date("Y-m-d H:i:s")
+			],
+			[
+				'name' => 'Dave Dee',
+				'email' => 'dave.dee@email.com',
+				// password: secret123
+				'password' => '$2y$10$RwECgIpcFIb52MbTKCsFde0/vhsuLsaEWItcXKTWCaLh3beZoiWjG',
+				'created_at' => date("Y-m-d H:i:s"),
+				'updated_at' => date("Y-m-d H:i:s")
 			]
 		]);
 	}

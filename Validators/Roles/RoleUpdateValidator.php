@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Cookbook\OAuth2\Validators\Clients;
+namespace Cookbook\OAuth2\Validators\Roles;
 
 use Cookbook\Contracts\OAuth2\ScopeRepositoryContract;
 use Cookbook\Core\Bus\RepositoryCommand;
@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Config;
 
 
 /**
- * ClientCreateValidator class
+ * RoleUpdateValidator class
  * 
- * Validating command for creating Client
+ * Validating command for updating Role
  * 
  * 
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
@@ -28,12 +28,12 @@ use Illuminate\Support\Facades\Config;
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */
-class ClientCreateValidator extends Validator
+class RoleUpdateValidator extends Validator
 {
 
 
 	/**
-	 * Set of rules for validating Client
+	 * Set of rules for validating Role
 	 *
 	 * @var array
 	 */
@@ -47,30 +47,24 @@ class ClientCreateValidator extends Validator
 	protected $scopeRepository;
 
 	/**
-	 * List of available grant types
-	 *
-	 * @var array
-	 */
-	protected $availableGrants = ['password', 'client_credentials'];
-
-	/**
-	 * Create new ClientCreateValidator
+	 * Create new RoleUpdateValidator
 	 * 
 	 * @return void
 	 */
 	public function __construct(ScopeRepositoryContract $scopeRepository)
 	{
+
 		$this->scopeRepository = $scopeRepository;
 
 		$this->rules = [
-			'name'					=> 'required|max:150',
-			'scopes'				=> 'required|array',
-			'grants'				=> 'required|array'
+			'name'					=> 'sometimes|required|max:150',
+			'description'			=> 'sometimes',
+			'scopes'				=> 'sometimes|array'
 		];
 
 		parent::__construct();
 
-		$this->exception->setErrorKey('client');
+		$this->exception->setErrorKey('role');
 	}
 
 
@@ -94,6 +88,10 @@ class ClientCreateValidator extends Validator
 			throw $this->exception;
 		}
 
+		if(!isset($command->params['scopes'])) {
+			return;
+		}
+
 		$scopes = $this->scopeRepository->getAll();
 
 		foreach ($command->params['scopes'] as $scope)
@@ -109,13 +107,6 @@ class ClientCreateValidator extends Validator
 			}
 			if(!$valid) {
 				$this->exception->addErrors(['scopes' => 'Scope \''.$scope.'\' doesn\'t exist.']);
-			}
-		}
-
-		foreach ($command->params['grants'] as $grant)
-		{
-			if(!in_array($grant, $this->availableGrants)) {
-				$this->exception->addErrors(['grants' => 'Grant \''.$grant.'\' isn\'t allowed.']);
 			}
 		}
 

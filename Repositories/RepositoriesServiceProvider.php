@@ -11,6 +11,8 @@
 namespace Cookbook\OAuth2\Repositories;
 
 use Illuminate\Support\ServiceProvider;
+use Cookbook\Contracts\OAuth2\ScopeRepositoryContract;
+use League\OAuth2\Server\Storage\ScopeInterface;
 
 /**
  * RepositoriesServiceProvider service provider for repositories
@@ -51,6 +53,7 @@ class RepositoriesServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$this->registerRepositories();
+		$this->registerAuthDriver();
 	}
 
 	/**
@@ -70,6 +73,41 @@ class RepositoriesServiceProvider extends ServiceProvider {
 		$this->app->alias(
 			'Cookbook\OAuth2\Repositories\ClientRepository', 'Cookbook\Contracts\OAuth2\ClientRepositoryContract'
 		);
+
+		$this->app->singleton('Cookbook\OAuth2\Repositories\RoleRepository', function($app) {
+			return new RoleRepository(
+				$app['db']->connection()
+			);
+		});
+
+		$this->app->alias(
+			'Cookbook\OAuth2\Repositories\RoleRepository', 'Cookbook\Contracts\OAuth2\RoleRepositoryContract'
+		);
+
+
+		$this->app->singleton('Cookbook\OAuth2\Repositories\UserRepository', function($app) {
+			return new UserRepository(
+				$app['db']->connection()
+			);
+		});
+
+		$this->app->alias(
+			'Cookbook\OAuth2\Repositories\UserRepository', 'Cookbook\Contracts\OAuth2\UserRepositoryContract'
+		);
+
+		$this->app->alias(
+			'Cookbook\OAuth2\Repositories\UserRepository', 'Illuminate\Contracts\Auth\UserProvider'
+		);
+
+		$this->app->singleton('Cookbook\OAuth2\Repositories\ScopeRepository', function($app) {
+			return new ScopeRepository(
+				$app['db']->connection()
+			);
+		});
+
+		$this->app->bind(ScopeRepositoryContract::class, ScopeRepository::class);
+        $this->app->bind(ScopeInterface::class, ScopeRepository::class);
+
 	}
 
 	/**
@@ -81,9 +119,26 @@ class RepositoriesServiceProvider extends ServiceProvider {
 	{
 		$mappings = [
 			'client' => 'Cookbook\OAuth2\Repositories\ClientRepository',
+			'role' => 'Cookbook\OAuth2\Repositories\RoleRepository',
+			'user' => 'Cookbook\Users\Repositories\UserRepository',
+			'scope' => 'Cookbook\Users\Repositories\ScopeRepository',
 		];
 
 		$this->app->make('Cookbook\Contracts\Core\ObjectResolverContract')->maps($mappings);
+	}
+
+	/**
+	 * Register UserRepository as Laravel Auth Driver
+	 *
+	 * @return void
+	 */
+	protected function registerAuthDriver()
+	{
+		$app = $this->app;
+		$auth = $this->app['auth'];
+		$auth->extend('repository', function() use( $app ){
+			return $app['Cookbook\Contracts\OAuth2\UserRepositoryContract'];
+		});
 	}
 
 	/**
@@ -95,7 +150,11 @@ class RepositoriesServiceProvider extends ServiceProvider {
 	{
 		return [
 			'Cookbook\OAuth2\Repositories\ClientRepository',
-			'Cookbook\Contracts\OAuth2\ClientRepositoryContract'
+			'Cookbook\Contracts\OAuth2\ClientRepositoryContract',
+			'Cookbook\OAuth2\Repositories\RoleRepository',
+			'Cookbook\Contracts\OAuth2\RoleRepositoryContract',
+			'Cookbook\Users\Repositories\UserRepository',
+			'Cookbook\Contracts\Users\UserRepositoryContract',
 		];
 	}
 
