@@ -224,6 +224,7 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryContrac
 		}
 
 		$this->deleteRoleScopes($role->id);
+		$this->deleteUserRoles($role->id);
 
 		// delete the role
 		$this->db->table($this->table)->where('id', '=', $role->id)->delete();
@@ -249,6 +250,27 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryContrac
 		}
 
 		$this->db->table('role_scopes')
+				 ->whereIn('role_id', $roleIds)
+				 ->delete();
+	}
+
+	/**
+	 * Delete user roles by role
+	 * 
+	 * @param array 	$roleIds
+	 * 
+	 * @return boolean
+	 * 
+	 * @throws InvalidArgumentException
+	 */
+	protected function deleteUserRoles($roleIds)
+	{
+		if( ! is_array($roleIds) )
+		{
+			$roleIds = [$roleIds];
+		}
+
+		$this->db->table('user_roles')
 				 ->whereIn('role_id', $roleIds)
 				 ->delete();
 	}
