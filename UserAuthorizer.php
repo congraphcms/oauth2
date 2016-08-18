@@ -95,14 +95,21 @@ class UserAuthorizer extends Authorizer
         $user = $this->userRepository->fetch($userId, ['roles']);
         $user = $user->toArray();
 
-        foreach ($user['roles'] as $role)
+        if(!empty($user['roles']))
         {
-        	foreach ($role['scopes'] as $userScope)
-        	{
-        		if($userScope == $scope) {
-        			return true;
-        		}
-        	}
+            foreach ($user['roles'] as $role)
+            {
+                if(!empty($role['scopes']))
+                {
+                    foreach ($role['scopes'] as $userScope)
+                    {
+                        if($userScope == $scope) {
+                            return true;
+                        }
+                    }
+                }
+            	
+            }
         }
 
         return false;
