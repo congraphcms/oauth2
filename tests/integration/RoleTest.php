@@ -21,10 +21,10 @@ class RoleTest extends Orchestra\Testbench\TestCase
 			'--realpath' => realpath(__DIR__.'/../../vendor/lucadegasperi/oauth2-server-laravel/database/migrations'),
 		]);
 
-		$this->artisan('migrate', [
-			'--database' => 'testbench',
-			'--realpath' => realpath(__DIR__.'/../../vendor/cookbook/users/database/migrations'),
-		]);
+		// $this->artisan('migrate', [
+		// 	'--database' => 'testbench',
+		// 	'--realpath' => realpath(__DIR__.'/../../vendor/cookbook/users/database/migrations'),
+		// ]);
 
 		$this->artisan('migrate', [
 			'--database' => 'testbench',
@@ -86,8 +86,8 @@ class RoleTest extends Orchestra\Testbench\TestCase
 		return [
 			'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
 			'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider',
-			'Cookbook\OAuth2\OAuth2ServiceProvider', 
-			'Cookbook\Users\UsersServiceProvider', 
+			'Cookbook\OAuth2\OAuth2ServiceProvider',
+			// 'Cookbook\Users\UsersServiceProvider', 
 			'Cookbook\Core\CoreServiceProvider',
 		];
 	}
@@ -105,13 +105,13 @@ class RoleTest extends Orchestra\Testbench\TestCase
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
-		
+
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleCreateCommand($params));
-		
+
 		$this->d->dump($result->toArray());
 		$this->assertEquals('Project Manager', $result->name);
 		$this->assertEquals('Edits entities of only one project.', $result->description);
-		
+
 		$this->seeInDatabase('roles', ['id' => $result->id, 'name' => $result->name, 'description' => $result->description]);
 	}
 
@@ -127,9 +127,9 @@ class RoleTest extends Orchestra\Testbench\TestCase
 			'name' => 'Content Editor',
 			'scopes' => ['manage_content_model']
 		];
-		
+
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleUpdateCommand($params, 2));
-		
+
 		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
 		$this->assertEquals(2, $result->id);
 		$this->assertEquals('Content Editor', $result->name);
@@ -138,7 +138,7 @@ class RoleTest extends Orchestra\Testbench\TestCase
 		$this->seeInDatabase('roles', ['id' => 2, 'name' => 'Content Editor']);
 		$this->seeInDatabase('role_scopes', ['role_id' => 2, 'scope_id' => 'manage_content_model']);
 		$this->dontSeeInDatabase('role_scopes', ['role_id' => 2, 'scope_id' => 'manage_entities']);
-		
+
 		$this->d->dump($result->toArray());
 	}
 
@@ -170,7 +170,7 @@ class RoleTest extends Orchestra\Testbench\TestCase
 
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleDeleteCommand([], 123));
 	}
-	
+
 	public function testFetchRole()
 	{
 
@@ -186,11 +186,11 @@ class RoleTest extends Orchestra\Testbench\TestCase
 		$this->assertEquals('Developer', $result->name);
 		$this->assertEquals(['manage_clients'], $result->scopes);
 		$this->d->dump($result->toArray());
-		
+
 
 	}
 
-	
+
 	public function testGetRoles()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");

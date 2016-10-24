@@ -60,6 +60,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
 	public function __construct(Connection $db)
 	{
 		$this->type = 'user';
+		$this->table = 'users';
 
 		// AbstractRepository constructor
 		parent::__construct($db);
@@ -343,6 +344,48 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
 		$meta = ['id' => $id, 'include' => $include];
 		$result->setMeta($meta);
 		$result->load($include);
+		return $result;
+	}
+
+	/**
+	 * Get user as owner by ID
+	 *
+	 * @param int $id - ID of user to be fetched
+	 *
+	 * @return array
+	 */
+	public function fetchOwner($id)
+	{
+
+		$user = $this->db->table($this->table)
+						 ->select('id', 'name', 'email', 'created_at', 'updated_at')
+						 ->find($id);
+		
+		if (! $user) {
+			throw new NotFoundException(['There is no user with that ID.']);
+		}
+
+		$scopes = $this->db->table('oauth_scopes')
+							->select('oauth_scopes.id as id')
+							->join('role_scopes', 'oauth_scopes.id', '=', 'role_scopes.scope_id')
+							->join('user_roles', 'user_roles.role_id', '=', 'role_scopes.role_id')
+							->where('user_roles.user_id', '=', $id)
+							->get();
+
+		$user->scopes = [];
+		foreach ($scopes as $scope) 
+		{
+			$user->scopes[] = $scope->id;
+		}
+
+		$user->type = $this->type;
+
+		$timezone = (Config::get('app.timezone'))?Config::get('app.timezone'):'UTC';
+		$user->created_at = Carbon::parse($user->created_at)->tz($timezone);
+		$user->updated_at = Carbon::parse($user->updated_at)->tz($timezone);
+
+		$result = new Model($user);
+		
 		return $result;
 	}
 

@@ -23,7 +23,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$this->artisan('db:seed', [
 			'--class' => 'UserTestDbSeeder'
 		]);
-		
+
 		$this->artisan('db:seed', [
 			'--class' => 'ScopeTestDbSeeder'
 		]);
@@ -93,14 +93,14 @@ class UserTest extends Orchestra\Testbench\TestCase
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
-		
+
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserCreateCommand($params));
-		
+
 		$this->d->dump($result->toArray());
 		$this->assertEquals('John Doe', $result->name);
 		$this->assertEquals('john.doe@email.com', $result->email);
 		$this->assertFalse(isset($result->password));
-		
+
 		$this->seeInDatabase('users', ['name' => 'John Doe', 'email' => 'john.doe@email.com']);
 		$this->seeInDatabase('user_roles', ['user_id' => $result->id, 'role_id' => 2]);
 	}
@@ -121,7 +121,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
-		
+
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserCreateCommand($params));
 	}
 
@@ -139,9 +139,9 @@ class UserTest extends Orchestra\Testbench\TestCase
 				['id' => 3, 'type' => 'role']
 			]
 		];
-		
+
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserUpdateCommand($params, 1));
-		
+
 		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
 		$this->assertTrue(is_int($result->id));
 		$this->assertEquals(1, $result->id);
@@ -151,7 +151,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$this->seeInDatabase('user_roles', ['user_id' => $result->id, 'role_id' => 2]);
 		$this->seeInDatabase('user_roles', ['user_id' => $result->id, 'role_id' => 3]);
 		$this->dontSeeInDatabase('user_roles', ['user_id' => $result->id, 'role_id' => 1]);
-		
+
 		$this->d->dump($result->toArray());
 	}
 
@@ -166,7 +166,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
 		$params = [
-			
+
 		];
 
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserUpdateCommand($params, 1222));
@@ -182,15 +182,15 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$params = [
 			'password' => 'newpassword123'
 		];
-		
+
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserChangePasswordCommand($params, 1));
-		
+
 		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
 		$this->assertTrue(is_int($result->id));
 		$this->assertEquals(1, $result->id);
 		$this->assertEquals('jane.doe@email.com', $result->email);
 		$this->assertEquals('Jane Doe', $result->name);
-		
+
 		$this->d->dump($result->toArray());
 	}
 
@@ -237,7 +237,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserDeleteCommand([], 133));
 	}
-	
+
 	public function testFetchUser()
 	{
 
@@ -253,11 +253,11 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$this->assertEquals('Jane Doe', $result->name);
 		$this->assertEquals('jane.doe@email.com', $result->email);
 		$this->d->dump($result->toArray());
-		
+
 
 	}
 
-	
+
 	public function testGetUsers()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");

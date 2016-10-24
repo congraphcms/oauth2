@@ -19,6 +19,8 @@ use League\OAuth2\Server\Util\RedirectUri;
 use LucaDegasperi\OAuth2Server\Exceptions\NoActiveAccessTokenException;
 use Symfony\Component\HttpFoundation\Request;
 use Cookbook\Contracts\OAuth2\UserRepositoryContract;
+use Cookbook\Contracts\OAuth2\ClientRepositoryContract;
+use League\OAuth2\Server\Entity\RefreshTokenEntity;
 
 /**
  * UserAuthorizer class
@@ -43,6 +45,13 @@ class UserAuthorizer extends Authorizer
 	 */
 	protected $userRepository;
 
+    /**
+     * User repository
+     *
+     * @var Cookbook\Contracts\OAuth2\ClientRepositoryContract
+     */
+    protected $clientRepository;
+
 
 	/**
      * Create a new UserAuthorizer instance.
@@ -50,15 +59,128 @@ class UserAuthorizer extends Authorizer
      * @param \League\OAuth2\Server\AuthorizationServer $issuer
      * @param \League\OAuth2\Server\ResourceServer $checker
      * @param \Cookbook\Contracts\OAuth2\UserRepositoryContract $userRepository
+     * @param \Cookbook\Contracts\OAuth2\ClientRepositoryContract $userRepository
      */
-    public function __construct(Issuer $issuer, Checker $checker, UserRepositoryContract $userRepository)
+    public function __construct(
+        Issuer $issuer, 
+        Checker $checker, 
+        UserRepositoryContract $userRepository, 
+        ClientRepositoryContract $clientRepository
+    )
     {
         $this->issuer = $issuer;
         $this->checker = $checker;
         $this->authCodeRequestParams = [];
         $this->userRepository = $userRepository;
+        $this->clientRepository = $clientRepository;
     }
 
+    /**
+     * get token session owner
+     *
+     * @return bool
+     */
+    public function getOwner()
+    {
+        $this->validateAccessToken(false);
+
+        $ownerId = $this->getResourceOwnerId();
+        $ownerType = $this->getResourceOwnerType();
+
+        if($ownerType == 'client')
+        {
+            return $this->getClient($ownerId);
+        }
+        elseif($ownerType == 'user')
+        {
+            return $this->getUser($ownerId);
+        }
+
+        return null;
+    }
+
+    /**
+     * get user as owner
+     * 
+     * @param  $id User ID
+     *
+     * @return Object
+     */
+    protected function getUser($id)
+    {
+        return $this->userRepository->fetchOwner($id);
+    }
+
+    /**
+     * get client as owner
+     *
+     * @param  $id Client ID
+     * 
+     * @return Object
+     */
+    protected function getClient($id)
+    {
+        return $this->clientRepository->fetchOwner($id);
+    }
+
+    /**
+     * Revoke the token
+     *
+     * @return bool
+     */
+    public function revokeToken()
+    {
+        $this->validateAccessToken(true);
+        $token = $this->issuer->getRequest()->request->get('token', null);
+        $tokenType = $this->issuer->getRequest()->request->get('token_type', null);
+        if($token === null)
+        {
+            throw new \League\OAuth2\Server\Exception\InvalidRequestException('token');
+        }
+        if($tokenType !== 'access_token' && $tokenType !== 'refresh_token' && $tokenType !== null)
+        {
+            throw new \League\OAuth2\Server\Exception\InvalidRequestException('token_type');
+        }
+
+        if($tokenType == 'access_token')
+        {
+            $tokenEntity = $this->issuer->getAccessTokenStorage()->get($token);
+            if(!$tokenEntity)
+            {
+                return;
+            }
+        }
+        elseif($tokenType == 'refresh_token')
+        {
+            $tokenEntity = $this->issuer->getRefreshTokenStorage()->get($token);
+            if(!$tokenEntity)
+            {
+                return;
+            }
+        }
+        else
+        {
+            $tokenEntity = $this->issuer->getAccessTokenStorage()->get($token);
+            if(!$tokenEntity)
+            {
+                $tokenEntity = $this->issuer->getRefreshTokenStorage()->get($token);
+                if(!$tokenEntity)
+                {
+                    return;
+                }
+            }
+        }
+
+        if($tokenEntity instanceof RefreshTokenEntity)
+        {
+            $accessToken = $tokenEntity->getAccessToken();
+            $accessToken->expire();
+        }
+
+        $tokenEntity->expire();
+        return;
+        
+    }
 
 	/**
      * Check if the current request has all the scopes passed.

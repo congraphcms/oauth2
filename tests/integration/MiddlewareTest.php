@@ -30,10 +30,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 			'--realpath' => realpath(__DIR__.'/../../vendor/lucadegasperi/oauth2-server-laravel/database/migrations'),
 		]);
 
-		$this->artisan('migrate', [
-			'--database' => 'testbench',
-			'--realpath' => realpath(__DIR__.'/../../vendor/cookbook/users/database/migrations'),
-		]);
+		// $this->artisan('migrate', [
+		// 	'--database' => 'testbench',
+		// 	'--realpath' => realpath(__DIR__.'/../../vendor/cookbook/users/database/migrations'),
+		// ]);
 
 		$this->artisan('db:seed', [
 			'--class' => 'UserTestDbSeeder'
@@ -101,14 +101,14 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 
 	protected function getPackageProviders($app)
 	{
-		return [ 
+		return [
 			'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
 			'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider',
-			'Cookbook\Users\UsersServiceProvider', 
+			// 'Cookbook\Users\UsersServiceProvider', 
 			'Cookbook\Core\CoreServiceProvider',
 			'Cookbook\OAuth2\OAuth2ServiceProvider',
-			
-			
+
+
 		];
 	}
 
@@ -154,9 +154,9 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 		$this->assertEquals(40, strlen($access_token));
 		$this->assertEquals(3600, $data['expires_in']);
 		$this->assertEquals('Bearer', $data['token_type']);
-		
+
 		$this->seeInDatabase('oauth_access_tokens', ['id' => $access_token]);
-		
+
 
 	}
 
@@ -208,7 +208,7 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 		$this->assertEquals(40, strlen($access_token));
 		$this->assertEquals(3600, $data['expires_in']);
 		$this->assertEquals('Bearer', $data['token_type']);
-		
+
 		$this->seeInDatabase('oauth_access_tokens', ['id' => $access_token]);
 	}
 
@@ -282,7 +282,7 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 		$this->assertEquals(40, strlen($refresh_token));
 		$this->assertEquals(3600, $data['expires_in']);
 		$this->assertEquals('Bearer', $data['token_type']);
-		
+
 		$this->seeInDatabase('oauth_access_tokens', ['id' => $access_token]);
 	}
 
@@ -328,7 +328,7 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 		$this->assertEquals(40, strlen($access_token));
 		$this->assertEquals(3600, $data['expires_in']);
 		$this->assertEquals('Bearer', $data['token_type']);
-		
+
 		$this->seeInDatabase('oauth_access_tokens', ['id' => $access_token]);
 	}
 
@@ -378,7 +378,7 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 		$this->assertEquals(40, strlen($access_token));
 		$this->assertEquals(3600, $data['expires_in']);
 		$this->assertEquals('Bearer', $data['token_type']);
-		
+
 		$this->seeInDatabase('oauth_access_tokens', ['id' => $access_token]);
 	}
 

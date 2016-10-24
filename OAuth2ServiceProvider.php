@@ -13,6 +13,7 @@ namespace Cookbook\OAuth2;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Cookbook\Contracts\OAuth2\UserRepositoryContract;
+use Cookbook\Contracts\OAuth2\ClientRepositoryContract;
 use Illuminate\Contracts\Container\Container as Application;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Laravel\Lumen\Application as LumenApplication;
@@ -146,8 +147,9 @@ class OAuth2ServiceProvider extends ServiceProvider {
             $checker = $app->make(ResourceServer::class);
 
             $userRepository = $app->make(UserRepositoryContract::class);
+            $clientRepository = $app->make(ClientRepositoryContract::class);
 
-            $authorizer = new UserAuthorizer($issuer, $checker, $userRepository);
+            $authorizer = new UserAuthorizer($issuer, $checker, $userRepository, $clientRepository);
             $authorizer->setRequest($app['request']);
             $authorizer->setTokenType($app->make($config['token_type']));
 

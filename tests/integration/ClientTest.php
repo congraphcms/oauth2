@@ -20,10 +20,10 @@ class ClientTest extends Orchestra\Testbench\TestCase
 			'--realpath' => realpath(__DIR__.'/../../vendor/lucadegasperi/oauth2-server-laravel/database/migrations'),
 		]);
 
-		$this->artisan('migrate', [
-			'--database' => 'testbench',
-			'--realpath' => realpath(__DIR__.'/../../vendor/cookbook/users/database/migrations'),
-		]);
+		// $this->artisan('migrate', [
+		// 	'--database' => 'testbench',
+		// 	'--realpath' => realpath(__DIR__.'/../../vendor/cookbook/users/database/migrations'),
+		// ]);
 
 		$this->artisan('db:seed', [
 			'--class' => 'UserTestDbSeeder'
@@ -75,8 +75,8 @@ class ClientTest extends Orchestra\Testbench\TestCase
 	protected function getPackageProviders($app)
 	{
 		return [
-			'Cookbook\OAuth2\OAuth2ServiceProvider', 
-			'Cookbook\Users\UsersServiceProvider', 
+			'Cookbook\OAuth2\OAuth2ServiceProvider',
+			// 'Cookbook\Users\UsersServiceProvider', 
 			'Cookbook\Core\CoreServiceProvider',
 			'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
 			'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider'
@@ -96,14 +96,14 @@ class ClientTest extends Orchestra\Testbench\TestCase
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
-		
+
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientCreateCommand($params));
-		
+
 		$this->d->dump($result->toArray());
 		$this->assertEquals('Jane\'s Mobile App', $result->name);
 		$this->assertEquals(40, strlen($result->id));
 		$this->assertEquals(40, strlen($result->secret));
-		
+
 		$this->seeInDatabase('oauth_clients', ['id' => $result->id, 'secret' => $result->secret, 'name' => 'Jane\'s Mobile App']);
 		$this->seeInDatabase('oauth_client_scopes', ['client_id' => $result->id, 'scope_id' => 'manage_entities']);
 		$this->seeInDatabase('oauth_client_grants', ['client_id' => $result->id, 'grant_id' => 'client_credentials']);
@@ -122,9 +122,9 @@ class ClientTest extends Orchestra\Testbench\TestCase
 			'scopes' => ['manage_content_model'],
 			'grants' => ['client_credentials']
 		];
-		
+
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientUpdateCommand($params, 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
-		
+
 		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
 		$this->assertTrue(is_string($result->id));
 		$this->assertEquals('iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR', $result->id);
@@ -135,7 +135,7 @@ class ClientTest extends Orchestra\Testbench\TestCase
 		$this->seeInDatabase('oauth_client_grants', ['client_id' => $result->id, 'grant_id' => 'client_credentials']);
 		$this->dontSeeInDatabase('oauth_client_scopes', ['client_id' => $result->id, 'scope_id' => 'manage_entities']);
 		$this->dontSeeInDatabase('oauth_client_grants', ['client_id' => $result->id, 'grant_id' => 'password']);
-		
+
 		$this->d->dump($result->toArray());
 	}
 
@@ -166,7 +166,7 @@ class ClientTest extends Orchestra\Testbench\TestCase
 
 		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientDeleteCommand([], '123'));
 	}
-	
+
 	public function testFetchClient()
 	{
 
@@ -182,11 +182,11 @@ class ClientTest extends Orchestra\Testbench\TestCase
 		$this->assertEquals('iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR', $result->id);
 		$this->assertEquals('Test Client', $result->name);
 		$this->d->dump($result->toArray());
-		
+
 
 	}
 
-	
+
 	public function testGetConsumers()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");

@@ -393,6 +393,45 @@ class ClientRepository extends AbstractRepository implements ClientRepositoryCon
 	}
 
 	/**
+	 * Get client as owner by ID
+	 *
+	 * @param int $id - ID of client to be fetched
+	 *
+	 * @return array
+	 */
+	public function fetchOwner($id)
+	{
+
+		$client = $this->db->table($this->table)
+						 ->select('id', 'name', 'created_at', 'updated_at')
+						 ->find($id);
+		
+		if (! $client) {
+			throw new NotFoundException(['There is no client with that ID.']);
+		}
+
+		$scopes = $this->db->table('oauth_client_scopes')
+							->where('client_id', '=', $id)
+							->get();
+
+		$client->scopes = [];
+		foreach ($scopes as $scope) 
+		{
+			$client->scopes[] = $scope->scope_id;
+		}
+
+		$client->type = $this->type;
+
+		$timezone = (Config::get('app.timezone'))?Config::get('app.timezone'):'UTC';
+		$client->created_at = Carbon::parse($client->created_at)->tz($timezone);
+		$client->updated_at = Carbon::parse($client->updated_at)->tz($timezone);
+
+		$result = new Model($client);
+		
+		return $result;
+	}
+
+	/**
 	 * Get client
 	 *
 	 * @return array
