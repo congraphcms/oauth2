@@ -32,11 +32,11 @@ use LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware;
 
 /**
  * OAuth2ServiceProvider service provider for OAuth-2 package
- * 
+ *
  * It will register all dependecies to app container
- * 
+ *
  * @uses   		Illuminate\Support\ServiceProvider
- * 
+ *
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @copyright  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @package 	cookbook/oauth-2
@@ -47,7 +47,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 
 	/**
 	* Register
-	* 
+	*
 	* @return void
 	*/
 	public function register()
@@ -62,7 +62,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 
 	/**
 	 * Boot
-	 * 
+	 *
 	 * @return void
 	 */
 	public function boot()
@@ -79,16 +79,16 @@ class OAuth2ServiceProvider extends ServiceProvider {
 		include __DIR__ . '/Http/routes.php';
 	}
 
-	
+
 
 	/**
 	 * Register Middleware
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function addMiddleware()
 	{
-		$this->app['router']->middleware('oauth', \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class);
+		$this->app['router']->middleware('oauth', \Cookbook\OAuth2\Http\Middleware\OAuthMiddleware::class);
 		$this->app['router']->middleware('oauth-user', \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class);
 		$this->app['router']->middleware('oauth-client', \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class);
 		$this->app['router']->middleware('oauth-authorization-params', \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class);
@@ -163,7 +163,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 
 	/**
 	 * Register Verifier
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function registerVerifier()
@@ -177,7 +177,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 
 	/**
 	 * Register Service Providers for this package
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function registerServiceProviders()
@@ -186,7 +186,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 		// Repositories
 		// -----------------------------------------------------------------------------
 		$this->app->register('Cookbook\OAuth2\Repositories\RepositoriesServiceProvider');
-		
+
 		// Handlers
 		// -----------------------------------------------------------------------------
 		$this->app->register('Cookbook\OAuth2\Handlers\HandlersServiceProvider');

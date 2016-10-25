@@ -90,12 +90,12 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 		        'callback' => '\Cookbook\OAuth2\PasswordGrantVerifier@verify',
 		        'access_token_ttl' => 3600
 		    ],
-		    'refresh_token' => [
-		        'class' => '\League\OAuth2\Server\Grant\RefreshTokenGrant',
-		        'access_token_ttl' => 3600,
-		        'refresh_token_ttl' => 604800,
-		        'rotate_refresh_tokens' => false
-		    ]
+	    'refresh_token' => [
+	        'class' => '\League\OAuth2\Server\Grant\RefreshTokenGrant',
+	        'access_token_ttl' => 3600,
+	        'refresh_token_ttl' => 604800,
+	        'rotate_refresh_tokens' => false
+	    ]
 		]);
 	}
 
@@ -104,7 +104,7 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 		return [
 			'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
 			'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider',
-			// 'Cookbook\Users\UsersServiceProvider', 
+			// 'Cookbook\Users\UsersServiceProvider',
 			'Cookbook\Core\CoreServiceProvider',
 			'Cookbook\OAuth2\OAuth2ServiceProvider',
 
@@ -413,7 +413,7 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	}
 
 	/**
-	 * @expectedException \League\OAuth2\Server\Exception\InvalidScopeException
+	 * @expectedException \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
 	 */
 	public function testAccessDeniedResourceWithScope()
 	{
@@ -445,7 +445,7 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	}
 
 	/**
-	 * @expectedException \League\OAuth2\Server\Exception\InvalidScopeException
+	 * @expectedException \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
 	 */
 	public function testAccessDeniedForUserResourceWithScope()
 	{
