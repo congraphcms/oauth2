@@ -76,7 +76,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
         $this->mergeConfigFrom($source, 'oauth2');
 		$this->addMiddleware();
 
-		include __DIR__ . '/Http/routes.php';
+		// include __DIR__ . '/Http/routes.php';
 	}
 
 

@@ -20,6 +20,7 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 
 	public function setUp()
 	{
+
 		parent::setUp();
 
 		// $this->artisan('migrate', [
@@ -54,6 +55,9 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 
 		$this->clientId = 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR';
 		$this->clientSecret = '3wMlLnCBONHSlrxUJESPm1VwF9kBnHEGcCFt8iVR';
+
+
+		
 	}
 
 	public function tearDown()
@@ -126,6 +130,10 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
+
 		$params = [
 			'grant_type' => 'client_credentials',
 			'client_id' => $this->clientId,
@@ -149,11 +157,11 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 
 		$this->refreshApplication();
 
-		$this->post('oauth/revoke_token', $revokeParams, $server);
+		Route::post('oauth/revoke_token', function() {
+		    return Response::json(Authorizer::revokeToken());
+		});
 
-		// $this->assertEquals('Voila!', $response->getContent());
-
-		// $this->d->dump($this->response->getContent());
+		$response = $this->call('POST', 'oauth/revoke_token', $revokeParams, $server);
 	}
 
 	/**
@@ -162,6 +170,10 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 	public function testRevokeTokenInvalidToken()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		$params = [
 			'grant_type' => 'client_credentials',
@@ -185,12 +197,20 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 
 		$this->refreshApplication();
 
+		Route::post('oauth/revoke_token', function() {
+		    return Response::json(Authorizer::revokeToken());
+		});
+
 		$this->post('oauth/revoke_token', $revokeParams, $server);
 	}
 
 	public function testRevokeAccessToken()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		$params = [
 			'grant_type' => 'client_credentials',
@@ -215,6 +235,10 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 
 		$this->refreshApplication();
 
+		Route::post('oauth/revoke_token', function() {
+		    return Response::json(Authorizer::revokeToken());
+		});
+
 		$this->post('oauth/revoke_token', $revokeParams, $server);
 
 		$this->seeStatusCode(200);
@@ -225,6 +249,10 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 	public function testRevokeRefreshToken()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		$params = [
 			'grant_type' => 'password',
@@ -250,6 +278,10 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 
 		$this->refreshApplication();
 
+		Route::post('oauth/revoke_token', function() {
+		    return Response::json(Authorizer::revokeToken());
+		});
+
 		$this->post('oauth/revoke_token', $revokeParams, $server);
 
 		$this->seeStatusCode(200);
@@ -261,6 +293,10 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 	public function testGetOwnerClient()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		$params = [
 			'grant_type' => 'client_credentials',
@@ -285,6 +321,11 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 
 		$this->refreshApplication();
 
+		Route::get('oauth/owner', function() {
+			$owner = Authorizer::getOwner();
+		    return Response::json(['data' => $owner->toArray()]);
+		});
+
 		$this->get('oauth/owner', $server);
 
 		$this->seeStatusCode(200);
@@ -304,6 +345,10 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 			'password' => 'secret123'
 		];
 
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
+
 		$response = $this->call('POST', 'oauth/access_token', $params);
 		$data = json_decode($response->getContent(), true);
 		$access_token = $data['access_token'];
@@ -320,6 +365,10 @@ class OAuthTest extends Orchestra\Testbench\TestCase
 
 		$this->refreshApplication();
 
+		Route::get('oauth/owner', function() {
+			$owner = Authorizer::getOwner();
+		    return Response::json(['data' => $owner->toArray()]);
+		});
 		$this->get('oauth/owner', $server);
 
 		$this->seeStatusCode(200);

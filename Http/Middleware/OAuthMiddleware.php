@@ -15,6 +15,7 @@ use League\OAuth2\Server\Exception\InvalidScopeException;
 use League\OAuth2\Server\Exception\OAuthException;
 use LucaDegasperi\OAuth2Server\Authorizer;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use stdClass;
 
 /**

@@ -138,6 +138,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
+
 		$params = [
 			'grant_type' => 'client_credentials',
 			'client_id' => $this->clientId,
@@ -163,6 +167,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	public function testClientCredentialsGrantAccessResource()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		Route::get('test', ['middleware' => 'oauth', 'uses' => function(){
 			return 'Voila!';
@@ -190,6 +198,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
+
 		$params = [
 			'grant_type' => 'password',
 			'client_id' => $this->clientId,
@@ -216,6 +228,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
+
 		Route::get('test', ['middleware' => 'oauth', 'uses' => function(){
 			return 'Voila!';
 		}]);
@@ -241,6 +257,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	public function testRefreshTokenGrantGetNewToken()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		$params = [
 			'grant_type' => 'password',
@@ -293,6 +313,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
+
 		Config::set('oauth2.limit_clients_to_grants', true);
 
 		$params = [
@@ -307,6 +331,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	public function testClientGrantAllowed()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		Config::set('oauth2.limit_clients_to_grants', true);
 
@@ -339,6 +367,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
+
 		Config::set('oauth2.limit_clients_to_scopes', true);
 
 		$params = [
@@ -356,6 +388,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	public function testClientScopeAllowed()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		Config::set('oauth2.limit_clients_to_scopes', true);
 
@@ -386,6 +422,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	public function testAccessResourceWithScope()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		Route::get('test', ['middleware' => 'oauth:manage_entities', 'uses' => function(){
 			return 'Voila!';
@@ -419,6 +459,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
 
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
+
 		Route::get('test', ['middleware' => 'oauth:manage_clients', 'uses' => function(){
 			return 'Voila!';
 		}]);
@@ -450,6 +494,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 	public function testAccessDeniedForUserResourceWithScope()
 	{
 		fwrite(STDOUT, __METHOD__ . "\n");
+
+		Route::post('oauth/access_token', function() {
+		    return Response::json(Authorizer::issueAccessToken());
+		});
 
 		Route::get('test', ['middleware' => 'oauth:manage_users', 'uses' => function(){
 			return 'Voila!';

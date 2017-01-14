@@ -1,5 +1,7 @@
 <?php
 
+
+use Illuminate\Support\Facades\Route;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
 Route::post('oauth/access_token', function() {
