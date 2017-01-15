@@ -130,7 +130,7 @@ class UserAuthorizer extends Authorizer
      */
     public function revokeToken()
     {
-        $this->validateAccessToken(true);
+        // $this->validateAccessToken(true);
         $token = $this->issuer->getRequest()->request->get('token', null);
         $tokenType = $this->issuer->getRequest()->request->get('token_type', null);
         if($token === null)
