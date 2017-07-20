@@ -69,10 +69,10 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 		$app['config']->set('database.connections.testbench', [
 			'driver'   	=> 'mysql',
 			'host'      => '127.0.0.1',
-			'port'		=> '33060',
+			'port'		=> '3306',
 			'database'	=> 'cookbook_testbench',
-			'username'  => 'homestead',
-			'password'  => 'secret',
+			'username'  => 'root',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
@@ -90,12 +90,12 @@ class MiddlewareTest extends Orchestra\Testbench\TestCase
 		        'callback' => '\Cookbook\OAuth2\PasswordGrantVerifier@verify',
 		        'access_token_ttl' => 3600
 		    ],
-	    'refresh_token' => [
-	        'class' => '\League\OAuth2\Server\Grant\RefreshTokenGrant',
-	        'access_token_ttl' => 3600,
-	        'refresh_token_ttl' => 604800,
-	        'rotate_refresh_tokens' => false
-	    ]
+		    'refresh_token' => [
+		        'class' => '\League\OAuth2\Server\Grant\RefreshTokenGrant',
+		        'access_token_ttl' => 3600,
+		        'refresh_token_ttl' => 604800,
+		        'rotate_refresh_tokens' => false
+		    ]
 		]);
 	}
 

@@ -58,10 +58,10 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$app['config']->set('database.connections.testbench', [
 			'driver'   	=> 'mysql',
 			'host'      => '127.0.0.1',
-			'port'		=> '33060',
+			'port'		=> '3306',
 			'database'	=> 'cookbook_testbench',
-			'username'  => 'homestead',
-			'password'  => 'secret',
+			'username'  => 'root',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
@@ -283,8 +283,8 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Collection);
 		$this->assertEquals(2, count($result));
 		$users = $result->toArray();
-		$this->assertEquals('Administrator',$users[0]['roles'][0]['name']);
 		$this->d->dump($users);
+		$this->assertEquals('Administrator',$users[0]['roles'][0]['name']);
 
 	}
 
