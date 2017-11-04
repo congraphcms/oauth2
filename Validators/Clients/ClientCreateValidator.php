@@ -51,7 +51,7 @@ class ClientCreateValidator extends Validator
 	 *
 	 * @var array
 	 */
-	protected $availableGrants = ['password', 'client_credentials'];
+	protected $availableGrants = ['password', 'client_credentials', 'refresh_token'];
 
 	/**
 	 * Create new ClientCreateValidator
