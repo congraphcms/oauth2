@@ -71,6 +71,10 @@ class OAuth2ServiceProvider extends ServiceProvider {
 			__DIR__.'/database/migrations' => database_path('/migrations'),
 		]);
 
+		$this->publishes([
+			__DIR__ . '/database/seeds' => database_path('/seeds'),
+		]);
+
 		$source = realpath(__DIR__.'/config/oauth2.php');
 
         $this->mergeConfigFrom($source, 'oauth2');
