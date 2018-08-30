@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the cookbook/oauth-2 package.
+ * This file is part of the congraph/oauth-2 package.
  *
  * (c) Nikola Plavšić <nikolaplavsic@gmail.com>
  *
@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Cookbook\OAuth2;
+namespace Congraph\OAuth2;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
-use Cookbook\Contracts\OAuth2\UserRepositoryContract;
-use Cookbook\Contracts\OAuth2\ClientRepositoryContract;
+use Congraph\Contracts\OAuth2\UserRepositoryContract;
+use Congraph\Contracts\OAuth2\ClientRepositoryContract;
 use Illuminate\Contracts\Container\Container as Application;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Laravel\Lumen\Application as LumenApplication;
@@ -39,7 +39,7 @@ use LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware;
  *
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @copyright  	Nikola Plavšić <nikolaplavsic@gmail.com>
- * @package 	cookbook/oauth-2
+ * @package 	congraph/oauth-2
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */
@@ -52,7 +52,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 	*/
 	public function register()
 	{
-		// $this->mergeConfigFrom(realpath(__DIR__ . '/config/cookbook.php'), 'cookbook');
+		// $this->mergeConfigFrom(realpath(__DIR__ . '/config/congraph.php'), 'congraph');
 		$this->registerServiceProviders();
 
 		$this->registerVerifier();
@@ -92,7 +92,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 	 */
 	protected function addMiddleware()
 	{
-		$this->app['router']->middleware('oauth', \Cookbook\OAuth2\Http\Middleware\OAuthMiddleware::class);
+		$this->app['router']->middleware('oauth', \Congraph\OAuth2\Http\Middleware\OAuthMiddleware::class);
 		$this->app['router']->middleware('oauth-user', \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class);
 		$this->app['router']->middleware('oauth-client', \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class);
 		$this->app['router']->middleware('oauth-authorization-params', \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class);
@@ -172,7 +172,7 @@ class OAuth2ServiceProvider extends ServiceProvider {
 	 */
 	protected function registerVerifier()
 	{
-		$this->app->singleton('Cookbook\OAuth2\PasswordGrantVerifier', function($app) {
+		$this->app->singleton('Congraph\OAuth2\PasswordGrantVerifier', function($app) {
 			return new PasswordGrantVerifier(
 				$app->make('Illuminate\Contracts\Auth\UserProvider')
 			);
@@ -189,19 +189,19 @@ class OAuth2ServiceProvider extends ServiceProvider {
 
 		// Repositories
 		// -----------------------------------------------------------------------------
-		$this->app->register('Cookbook\OAuth2\Repositories\RepositoriesServiceProvider');
+		$this->app->register('Congraph\OAuth2\Repositories\RepositoriesServiceProvider');
 
 		// Handlers
 		// -----------------------------------------------------------------------------
-		$this->app->register('Cookbook\OAuth2\Handlers\HandlersServiceProvider');
+		$this->app->register('Congraph\OAuth2\Handlers\HandlersServiceProvider');
 
 		// Validators
 		// -----------------------------------------------------------------------------
-		$this->app->register('Cookbook\OAuth2\Validators\ValidatorsServiceProvider');
+		$this->app->register('Congraph\OAuth2\Validators\ValidatorsServiceProvider');
 
 		// Commands
 		// -----------------------------------------------------------------------------
-		$this->app->register('Cookbook\OAuth2\Commands\CommandsServiceProvider');
+		$this->app->register('Congraph\OAuth2\Commands\CommandsServiceProvider');
 
 	}
 

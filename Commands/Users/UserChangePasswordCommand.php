@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the cookbook/oauth-2 package.
+ * This file is part of the congraph/oauth-2 package.
  *
  * (c) Nikola Plavšić <nikolaplavsic@gmail.com>
  *
@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Cookbook\OAuth2\Commands\Users;
+namespace Congraph\OAuth2\Commands\Users;
 
-use Cookbook\Core\Bus\RepositoryCommand;
+use Congraph\Core\Bus\RepositoryCommand;
 
 /**
  * UserChangePasswordCommand class
@@ -19,7 +19,7 @@ use Cookbook\Core\Bus\RepositoryCommand;
  * 
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @copyright  	Nikola Plavšić <nikolaplavsic@gmail.com>
- * @package 	cookbook/oauth-2
+ * @package 	congraph/oauth-2
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */

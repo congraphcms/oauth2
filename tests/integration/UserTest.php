@@ -59,7 +59,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 			'driver'   	=> 'mysql',
 			'host'      => '127.0.0.1',
 			'port'		=> '3306',
-			'database'	=> 'cookbook_testbench',
+			'database'	=> 'congraph_testbench',
 			'username'  => 'root',
 			'password'  => '',
 			'charset'   => 'utf8',
@@ -71,7 +71,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 
 	protected function getPackageProviders($app)
 	{
-		return ['Cookbook\OAuth2\OAuth2ServiceProvider', 'Cookbook\Core\CoreServiceProvider'];
+		return ['Congraph\OAuth2\OAuth2ServiceProvider', 'Congraph\Core\CoreServiceProvider'];
 	}
 
 	public function testCreateUser()
@@ -94,7 +94,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserCreateCommand($params));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserCreateCommand($params));
 
 		$this->d->dump($result->toArray());
 		$this->assertEquals('John Doe', $result->name);
@@ -106,7 +106,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 	}
 
 	/**
-	 * @expectedException \Cookbook\Core\Exceptions\ValidationException
+	 * @expectedException \Congraph\Core\Exceptions\ValidationException
 	 */
 	public function testCreateException()
 	{
@@ -122,7 +122,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserCreateCommand($params));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserCreateCommand($params));
 	}
 
 	public function testUpdateUser()
@@ -140,9 +140,9 @@ class UserTest extends Orchestra\Testbench\TestCase
 			]
 		];
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserUpdateCommand($params, 1));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserUpdateCommand($params, 1));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Model);
 		$this->assertTrue(is_int($result->id));
 		$this->assertEquals(1, $result->id);
 		$this->assertEquals('jane.doe@email.com', $result->email);
@@ -156,7 +156,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 	}
 
 	/**
-	 * @expectedException \Cookbook\Core\Exceptions\NotFoundException
+	 * @expectedException \Congraph\Core\Exceptions\NotFoundException
 	 */
 	public function testUpdateException()
 	{
@@ -169,7 +169,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 
 		];
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserUpdateCommand($params, 1222));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserUpdateCommand($params, 1222));
 	}
 
 	public function testChangeUserPassword()
@@ -183,9 +183,9 @@ class UserTest extends Orchestra\Testbench\TestCase
 			'password' => 'newpassword123'
 		];
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserChangePasswordCommand($params, 1));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserChangePasswordCommand($params, 1));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Model);
 		$this->assertTrue(is_int($result->id));
 		$this->assertEquals(1, $result->id);
 		$this->assertEquals('jane.doe@email.com', $result->email);
@@ -195,7 +195,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 	}
 
 	/**
-	 * @expectedException \Cookbook\Core\Exceptions\ValidationException
+	 * @expectedException \Congraph\Core\Exceptions\ValidationException
 	 */
 	public function testChangeUserPasswordException()
 	{
@@ -208,7 +208,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 			'password' => ''
 		];
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserChangePasswordCommand($params, 1222));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserChangePasswordCommand($params, 1222));
 	}
 
 	public function testDeleteUser()
@@ -218,7 +218,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserDeleteCommand([], 1));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserDeleteCommand([], 1));
 
 		$this->assertEquals(1, $result);
 		$this->d->dump($result);
@@ -226,7 +226,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 	}
 
 	/**
-	 * @expectedException \Cookbook\Core\Exceptions\NotFoundException
+	 * @expectedException \Congraph\Core\Exceptions\NotFoundException
 	 */
 	public function testDeleteException()
 	{
@@ -235,7 +235,7 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserDeleteCommand([], 133));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserDeleteCommand([], 133));
 	}
 
 	public function testFetchUser()
@@ -246,9 +246,9 @@ class UserTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserFetchCommand([], 1));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserFetchCommand([], 1));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Model);
 		$this->assertTrue(is_int($result->id));
 		$this->assertEquals('Jane Doe', $result->name);
 		$this->assertEquals('jane.doe@email.com', $result->email);
@@ -264,9 +264,9 @@ class UserTest extends Orchestra\Testbench\TestCase
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserGetCommand([]));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserGetCommand([]));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Collection);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Collection);
 		$this->assertEquals(2, count($result));
 		$this->d->dump($result->toArray());
 
@@ -278,9 +278,9 @@ class UserTest extends Orchestra\Testbench\TestCase
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Users\UserGetCommand(['include' => 'roles']));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Users\UserGetCommand(['include' => 'roles']));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Collection);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Collection);
 		$this->assertEquals(2, count($result));
 		$users = $result->toArray();
 		$this->d->dump($users);

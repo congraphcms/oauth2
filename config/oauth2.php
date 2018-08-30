@@ -34,7 +34,7 @@ return [
         ],
         'password' => [
             'class' => '\League\OAuth2\Server\Grant\PasswordGrant',
-            'callback' => '\Cookbook\OAuth2\PasswordGrantVerifier@verify',
+            'callback' => '\Congraph\OAuth2\PasswordGrantVerifier@verify',
             'access_token_ttl' => 3600
         ],
         'refresh_token' => [

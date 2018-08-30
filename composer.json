@@ -1,48 +1,27 @@
 {
-    "name": "cookbook/oauth-2",
-
+    "name": "congraph/oauth2",
     "description": "",
-
     "authors": [
         {
             "name": "Nikola Plavsic",
             "email": "nikolaplavsic@gmail.com"
         }
     ],
-
     "require": {
         "php": ">=5.5.9",
         "lucadegasperi/oauth2-server-laravel": "5.1.*",
         "doctrine/dbal": "*",
-        "cookbook/core": "dev-master"
+        "congraph/core": "self.version"
     },
-
-    "repositories": [
-        {
-            "type": "git",
-            "url":  "git@bitbucket.org:cookbookcms/users.git"
-        },
-        {
-            "type": "git",
-            "url":  "git@bitbucket.org:cookbookcms/core.git"
-        },
-        {
-            "type": "git",
-            "url":  "git@bitbucket.org:cookbookcms/contracts.git"
-        }
-    ],
-
     "require-dev": {
         "phpunit/phpunit": "4.5.*",
         "orchestra/testbench": "3.1.*"
     },
-
     "autoload": {
         "psr-4": {
-            "Cookbook\\OAuth2\\": ""
+            "Congraph\\OAuth2\\": ""
         },
         "classmap": []
     },
-
     "minimum-stability": "dev"
 }

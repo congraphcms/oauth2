@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the cookbook/oauth-2 package.
+ * This file is part of the congraph/oauth-2 package.
  *
  * (c) Nikola Plavšić <nikolaplavsic@gmail.com>
  *
@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Cookbook\OAuth2;
+namespace Congraph\OAuth2;
 
 use LucaDegasperi\OAuth2Server\Authorizer;
 use League\OAuth2\Server\AuthorizationServer as Issuer;
@@ -18,8 +18,8 @@ use League\OAuth2\Server\TokenType\TokenTypeInterface;
 use League\OAuth2\Server\Util\RedirectUri;
 use LucaDegasperi\OAuth2Server\Exceptions\NoActiveAccessTokenException;
 use Symfony\Component\HttpFoundation\Request;
-use Cookbook\Contracts\OAuth2\UserRepositoryContract;
-use Cookbook\Contracts\OAuth2\ClientRepositoryContract;
+use Congraph\Contracts\OAuth2\UserRepositoryContract;
+use Congraph\Contracts\OAuth2\ClientRepositoryContract;
 use League\OAuth2\Server\Entity\RefreshTokenEntity;
 
 /**
@@ -31,7 +31,7 @@ use League\OAuth2\Server\Entity\RefreshTokenEntity;
  *
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @copyright  	Nikola Plavšić <nikolaplavsic@gmail.com>
- * @package 	cookbook/oauth-2
+ * @package 	congraph/oauth-2
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */
@@ -41,14 +41,14 @@ class UserAuthorizer extends Authorizer
 	/**
 	 * User repository
 	 *
-	 * @var Cookbook\Contracts\OAuth2\UserRepositoryContract
+	 * @var Congraph\Contracts\OAuth2\UserRepositoryContract
 	 */
 	protected $userRepository;
 
     /**
      * User repository
      *
-     * @var Cookbook\Contracts\OAuth2\ClientRepositoryContract
+     * @var Congraph\Contracts\OAuth2\ClientRepositoryContract
      */
     protected $clientRepository;
 
@@ -58,8 +58,8 @@ class UserAuthorizer extends Authorizer
      *
      * @param \League\OAuth2\Server\AuthorizationServer $issuer
      * @param \League\OAuth2\Server\ResourceServer $checker
-     * @param \Cookbook\Contracts\OAuth2\UserRepositoryContract $userRepository
-     * @param \Cookbook\Contracts\OAuth2\ClientRepositoryContract $userRepository
+     * @param \Congraph\Contracts\OAuth2\UserRepositoryContract $userRepository
+     * @param \Congraph\Contracts\OAuth2\ClientRepositoryContract $userRepository
      */
     public function __construct(
         Issuer $issuer, 

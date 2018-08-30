@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the cookbook/oauth-2 package.
+ * This file is part of the congraph/oauth-2 package.
  *
  * (c) Nikola Plavšić <nikolaplavsic@gmail.com>
  *
@@ -8,29 +8,29 @@
  * file that was distributed with this source code.
  */
 
-namespace Cookbook\OAuth2\Handlers;
+namespace Congraph\OAuth2\Handlers;
 
 use Illuminate\Support\ServiceProvider;
 
 
-use Cookbook\OAuth2\Handlers\Commands\Clients\ClientCreateHandler;
-use Cookbook\OAuth2\Handlers\Commands\Clients\ClientUpdateHandler;
-use Cookbook\OAuth2\Handlers\Commands\Clients\ClientDeleteHandler;
-use Cookbook\OAuth2\Handlers\Commands\Clients\ClientFetchHandler;
-use Cookbook\OAuth2\Handlers\Commands\Clients\ClientGetHandler;
+use Congraph\OAuth2\Handlers\Commands\Clients\ClientCreateHandler;
+use Congraph\OAuth2\Handlers\Commands\Clients\ClientUpdateHandler;
+use Congraph\OAuth2\Handlers\Commands\Clients\ClientDeleteHandler;
+use Congraph\OAuth2\Handlers\Commands\Clients\ClientFetchHandler;
+use Congraph\OAuth2\Handlers\Commands\Clients\ClientGetHandler;
 
-use Cookbook\OAuth2\Handlers\Commands\Roles\RoleCreateHandler;
-use Cookbook\OAuth2\Handlers\Commands\Roles\RoleUpdateHandler;
-use Cookbook\OAuth2\Handlers\Commands\Roles\RoleDeleteHandler;
-use Cookbook\OAuth2\Handlers\Commands\Roles\RoleFetchHandler;
-use Cookbook\OAuth2\Handlers\Commands\Roles\RoleGetHandler;
+use Congraph\OAuth2\Handlers\Commands\Roles\RoleCreateHandler;
+use Congraph\OAuth2\Handlers\Commands\Roles\RoleUpdateHandler;
+use Congraph\OAuth2\Handlers\Commands\Roles\RoleDeleteHandler;
+use Congraph\OAuth2\Handlers\Commands\Roles\RoleFetchHandler;
+use Congraph\OAuth2\Handlers\Commands\Roles\RoleGetHandler;
 
-use Cookbook\OAuth2\Handlers\Commands\Users\UserCreateHandler;
-use Cookbook\OAuth2\Handlers\Commands\Users\UserUpdateHandler;
-use Cookbook\OAuth2\Handlers\Commands\Users\UserDeleteHandler;
-use Cookbook\OAuth2\Handlers\Commands\Users\UserFetchHandler;
-use Cookbook\OAuth2\Handlers\Commands\Users\UserGetHandler;
-use Cookbook\OAuth2\Handlers\Commands\Users\UserChangePasswordHandler;
+use Congraph\OAuth2\Handlers\Commands\Users\UserCreateHandler;
+use Congraph\OAuth2\Handlers\Commands\Users\UserUpdateHandler;
+use Congraph\OAuth2\Handlers\Commands\Users\UserDeleteHandler;
+use Congraph\OAuth2\Handlers\Commands\Users\UserFetchHandler;
+use Congraph\OAuth2\Handlers\Commands\Users\UserGetHandler;
+use Congraph\OAuth2\Handlers\Commands\Users\UserChangePasswordHandler;
 
 /**
  * HandlersServiceProvider service provider for handlers
@@ -41,7 +41,7 @@ use Cookbook\OAuth2\Handlers\Commands\Users\UserChangePasswordHandler;
  * 
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @copyright  	Nikola Plavšić <nikolaplavsic@gmail.com>
- * @package 	cookbook/oauth-2
+ * @package 	congraph/oauth-2
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */
@@ -85,42 +85,42 @@ class HandlersServiceProvider extends ServiceProvider {
 		$mappings = [
 
 			// Clients
-			'Cookbook\OAuth2\Commands\Clients\ClientCreateCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Clients\ClientCreateHandler@handle',
-			'Cookbook\OAuth2\Commands\Clients\ClientUpdateCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Clients\ClientUpdateHandler@handle',
-			'Cookbook\OAuth2\Commands\Clients\ClientDeleteCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Clients\ClientDeleteHandler@handle',
-			'Cookbook\OAuth2\Commands\Clients\ClientFetchCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Clients\ClientFetchHandler@handle',
-			'Cookbook\OAuth2\Commands\Clients\ClientGetCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Clients\ClientGetHandler@handle',
+			'Congraph\OAuth2\Commands\Clients\ClientCreateCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Clients\ClientCreateHandler@handle',
+			'Congraph\OAuth2\Commands\Clients\ClientUpdateCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Clients\ClientUpdateHandler@handle',
+			'Congraph\OAuth2\Commands\Clients\ClientDeleteCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Clients\ClientDeleteHandler@handle',
+			'Congraph\OAuth2\Commands\Clients\ClientFetchCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Clients\ClientFetchHandler@handle',
+			'Congraph\OAuth2\Commands\Clients\ClientGetCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Clients\ClientGetHandler@handle',
 
 			// Roles
-			'Cookbook\OAuth2\Commands\Roles\RoleCreateCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Roles\RoleCreateHandler@handle',
-			'Cookbook\OAuth2\Commands\Roles\RoleUpdateCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Roles\RoleUpdateHandler@handle',
-			'Cookbook\OAuth2\Commands\Roles\RoleDeleteCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Roles\RoleDeleteHandler@handle',
-			'Cookbook\OAuth2\Commands\Roles\RoleFetchCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Roles\RoleFetchHandler@handle',
-			'Cookbook\OAuth2\Commands\Roles\RoleGetCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Roles\RoleGetHandler@handle',
+			'Congraph\OAuth2\Commands\Roles\RoleCreateCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Roles\RoleCreateHandler@handle',
+			'Congraph\OAuth2\Commands\Roles\RoleUpdateCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Roles\RoleUpdateHandler@handle',
+			'Congraph\OAuth2\Commands\Roles\RoleDeleteCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Roles\RoleDeleteHandler@handle',
+			'Congraph\OAuth2\Commands\Roles\RoleFetchCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Roles\RoleFetchHandler@handle',
+			'Congraph\OAuth2\Commands\Roles\RoleGetCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Roles\RoleGetHandler@handle',
 
 			// Users
-			'Cookbook\OAuth2\Commands\Users\UserCreateCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Users\UserCreateHandler@handle',
-			'Cookbook\OAuth2\Commands\Users\UserUpdateCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Users\UserUpdateHandler@handle',
-			'Cookbook\OAuth2\Commands\Users\UserDeleteCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Users\UserDeleteHandler@handle',
-			'Cookbook\OAuth2\Commands\Users\UserFetchCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Users\UserFetchHandler@handle',
-			'Cookbook\OAuth2\Commands\Users\UserGetCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Users\UserGetHandler@handle',
-			'Cookbook\OAuth2\Commands\Users\UserChangePasswordCommand' => 
-				'Cookbook\OAuth2\Handlers\Commands\Users\UserChangePasswordHandler@handle',
+			'Congraph\OAuth2\Commands\Users\UserCreateCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Users\UserCreateHandler@handle',
+			'Congraph\OAuth2\Commands\Users\UserUpdateCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Users\UserUpdateHandler@handle',
+			'Congraph\OAuth2\Commands\Users\UserDeleteCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Users\UserDeleteHandler@handle',
+			'Congraph\OAuth2\Commands\Users\UserFetchCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Users\UserFetchHandler@handle',
+			'Congraph\OAuth2\Commands\Users\UserGetCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Users\UserGetHandler@handle',
+			'Congraph\OAuth2\Commands\Users\UserChangePasswordCommand' => 
+				'Congraph\OAuth2\Handlers\Commands\Users\UserChangePasswordHandler@handle',
 			
 		];
 
@@ -136,77 +136,77 @@ class HandlersServiceProvider extends ServiceProvider {
 
 		// Clients
 		
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Clients\ClientCreateHandler', function($app){
-			return new ClientCreateHandler($app->make('Cookbook\Contracts\OAuth2\ClientRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Clients\ClientCreateHandler', function($app){
+			return new ClientCreateHandler($app->make('Congraph\Contracts\OAuth2\ClientRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Clients\ClientUpdateHandler', function($app){
-			return new ClientUpdateHandler($app->make('Cookbook\Contracts\OAuth2\ClientRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Clients\ClientUpdateHandler', function($app){
+			return new ClientUpdateHandler($app->make('Congraph\Contracts\OAuth2\ClientRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Clients\ClientDeleteHandler', function($app){
-			return new ClientDeleteHandler($app->make('Cookbook\Contracts\OAuth2\ClientRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Clients\ClientDeleteHandler', function($app){
+			return new ClientDeleteHandler($app->make('Congraph\Contracts\OAuth2\ClientRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Clients\ClientFetchHandler', function($app){
-			return new ClientFetchHandler($app->make('Cookbook\Contracts\OAuth2\ClientRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Clients\ClientFetchHandler', function($app){
+			return new ClientFetchHandler($app->make('Congraph\Contracts\OAuth2\ClientRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Clients\ClientGetHandler', function($app){
-			return new ClientGetHandler($app->make('Cookbook\Contracts\OAuth2\ClientRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Clients\ClientGetHandler', function($app){
+			return new ClientGetHandler($app->make('Congraph\Contracts\OAuth2\ClientRepositoryContract'));
 		});
 
 
 		// Roles
 		
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Roles\RoleCreateHandler', function($app){
-			return new RoleCreateHandler($app->make('Cookbook\Contracts\OAuth2\RoleRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Roles\RoleCreateHandler', function($app){
+			return new RoleCreateHandler($app->make('Congraph\Contracts\OAuth2\RoleRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Roles\RoleUpdateHandler', function($app){
-			return new RoleUpdateHandler($app->make('Cookbook\Contracts\OAuth2\RoleRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Roles\RoleUpdateHandler', function($app){
+			return new RoleUpdateHandler($app->make('Congraph\Contracts\OAuth2\RoleRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Roles\RoleDeleteHandler', function($app){
-			return new RoleDeleteHandler($app->make('Cookbook\Contracts\OAuth2\RoleRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Roles\RoleDeleteHandler', function($app){
+			return new RoleDeleteHandler($app->make('Congraph\Contracts\OAuth2\RoleRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Roles\RoleFetchHandler', function($app){
-			return new RoleFetchHandler($app->make('Cookbook\Contracts\OAuth2\RoleRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Roles\RoleFetchHandler', function($app){
+			return new RoleFetchHandler($app->make('Congraph\Contracts\OAuth2\RoleRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Roles\RoleGetHandler', function($app){
-			return new RoleGetHandler($app->make('Cookbook\Contracts\OAuth2\RoleRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Roles\RoleGetHandler', function($app){
+			return new RoleGetHandler($app->make('Congraph\Contracts\OAuth2\RoleRepositoryContract'));
 		});
 
 
 		// Users
 		
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Users\UserCreateHandler', function($app){
-			return new UserCreateHandler($app->make('Cookbook\Contracts\OAuth2\UserRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Users\UserCreateHandler', function($app){
+			return new UserCreateHandler($app->make('Congraph\Contracts\OAuth2\UserRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Users\UserUpdateHandler', function($app){
-			return new UserUpdateHandler($app->make('Cookbook\Contracts\OAuth2\UserRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Users\UserUpdateHandler', function($app){
+			return new UserUpdateHandler($app->make('Congraph\Contracts\OAuth2\UserRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Users\UserDeleteHandler', function($app){
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Users\UserDeleteHandler', function($app){
 			return new UserDeleteHandler(
-				$app->make('Cookbook\Contracts\OAuth2\UserRepositoryContract')
-				// $app->make('Cookbook\Contracts\Users\ConsumerRepositoryContract')
+				$app->make('Congraph\Contracts\OAuth2\UserRepositoryContract')
+				// $app->make('Congraph\Contracts\Users\ConsumerRepositoryContract')
 			);
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Users\UserFetchHandler', function($app){
-			return new UserFetchHandler($app->make('Cookbook\Contracts\OAuth2\UserRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Users\UserFetchHandler', function($app){
+			return new UserFetchHandler($app->make('Congraph\Contracts\OAuth2\UserRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Users\UserGetHandler', function($app){
-			return new UserGetHandler($app->make('Cookbook\Contracts\OAuth2\UserRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Users\UserGetHandler', function($app){
+			return new UserGetHandler($app->make('Congraph\Contracts\OAuth2\UserRepositoryContract'));
 		});
 
-		$this->app->bind('Cookbook\OAuth2\Handlers\Commands\Users\UserChangePasswordHandler', function($app){
-			return new UserChangePasswordHandler($app->make('Cookbook\Contracts\OAuth2\UserRepositoryContract'));
+		$this->app->bind('Congraph\OAuth2\Handlers\Commands\Users\UserChangePasswordHandler', function($app){
+			return new UserChangePasswordHandler($app->make('Congraph\Contracts\OAuth2\UserRepositoryContract'));
 		});
 
 	}
@@ -221,28 +221,28 @@ class HandlersServiceProvider extends ServiceProvider {
 	{
 		return [
 			// Clients
-			'Cookbook\OAuth2\Handlers\Commands\Clients\ClientCreateHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Clients\ClientUpdateHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Clients\ClientDeleteHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Clients\ClientFetchHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Clients\ClientGetHandler',
+			'Congraph\OAuth2\Handlers\Commands\Clients\ClientCreateHandler',
+			'Congraph\OAuth2\Handlers\Commands\Clients\ClientUpdateHandler',
+			'Congraph\OAuth2\Handlers\Commands\Clients\ClientDeleteHandler',
+			'Congraph\OAuth2\Handlers\Commands\Clients\ClientFetchHandler',
+			'Congraph\OAuth2\Handlers\Commands\Clients\ClientGetHandler',
 
 
 			// Roles
-			'Cookbook\OAuth2\Handlers\Commands\Roles\RoleCreateHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Roles\RoleUpdateHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Roles\RoleDeleteHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Roles\RoleFetchHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Roles\RoleGetHandler',
+			'Congraph\OAuth2\Handlers\Commands\Roles\RoleCreateHandler',
+			'Congraph\OAuth2\Handlers\Commands\Roles\RoleUpdateHandler',
+			'Congraph\OAuth2\Handlers\Commands\Roles\RoleDeleteHandler',
+			'Congraph\OAuth2\Handlers\Commands\Roles\RoleFetchHandler',
+			'Congraph\OAuth2\Handlers\Commands\Roles\RoleGetHandler',
 
 
 			// Users
-			'Cookbook\OAuth2\Handlers\Commands\Users\UserCreateHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Users\UserUpdateHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Users\UserDeleteHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Users\UserFetchHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Users\UserGetHandler',
-			'Cookbook\OAuth2\Handlers\Commands\Users\UserChangePasswordHandler',
+			'Congraph\OAuth2\Handlers\Commands\Users\UserCreateHandler',
+			'Congraph\OAuth2\Handlers\Commands\Users\UserUpdateHandler',
+			'Congraph\OAuth2\Handlers\Commands\Users\UserDeleteHandler',
+			'Congraph\OAuth2\Handlers\Commands\Users\UserFetchHandler',
+			'Congraph\OAuth2\Handlers\Commands\Users\UserGetHandler',
+			'Congraph\OAuth2\Handlers\Commands\Users\UserChangePasswordHandler',
 		];
 	}
 }

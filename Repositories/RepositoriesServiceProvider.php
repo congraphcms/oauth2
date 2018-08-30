@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the cookbook/oauth-2 package.
+ * This file is part of the congraph/oauth-2 package.
  *
  * (c) Nikola Plavšić <nikolaplavsic@gmail.com>
  *
@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Cookbook\OAuth2\Repositories;
+namespace Congraph\OAuth2\Repositories;
 
 use Illuminate\Support\ServiceProvider;
-use Cookbook\Contracts\OAuth2\ScopeRepositoryContract;
+use Congraph\Contracts\OAuth2\ScopeRepositoryContract;
 use League\OAuth2\Server\Storage\ScopeInterface;
 
 /**
@@ -23,7 +23,7 @@ use League\OAuth2\Server\Storage\ScopeInterface;
  * 
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @copyright  	Nikola Plavšić <nikolaplavsic@gmail.com>
- * @package 	cookbook/oauth-2
+ * @package 	congraph/oauth-2
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */
@@ -64,42 +64,42 @@ class RepositoriesServiceProvider extends ServiceProvider {
 	protected function registerRepositories()
 	{
 
-		$this->app->singleton('Cookbook\OAuth2\Repositories\ClientRepository', function($app) {
+		$this->app->singleton('Congraph\OAuth2\Repositories\ClientRepository', function($app) {
 			return new ClientRepository(
 				$app['db']->connection()
 			);
 		});
 
 		$this->app->alias(
-			'Cookbook\OAuth2\Repositories\ClientRepository', 'Cookbook\Contracts\OAuth2\ClientRepositoryContract'
+			'Congraph\OAuth2\Repositories\ClientRepository', 'Congraph\Contracts\OAuth2\ClientRepositoryContract'
 		);
 
-		$this->app->singleton('Cookbook\OAuth2\Repositories\RoleRepository', function($app) {
+		$this->app->singleton('Congraph\OAuth2\Repositories\RoleRepository', function($app) {
 			return new RoleRepository(
 				$app['db']->connection()
 			);
 		});
 
 		$this->app->alias(
-			'Cookbook\OAuth2\Repositories\RoleRepository', 'Cookbook\Contracts\OAuth2\RoleRepositoryContract'
+			'Congraph\OAuth2\Repositories\RoleRepository', 'Congraph\Contracts\OAuth2\RoleRepositoryContract'
 		);
 
 
-		$this->app->singleton('Cookbook\OAuth2\Repositories\UserRepository', function($app) {
+		$this->app->singleton('Congraph\OAuth2\Repositories\UserRepository', function($app) {
 			return new UserRepository(
 				$app['db']->connection()
 			);
 		});
 
 		$this->app->alias(
-			'Cookbook\OAuth2\Repositories\UserRepository', 'Cookbook\Contracts\OAuth2\UserRepositoryContract'
+			'Congraph\OAuth2\Repositories\UserRepository', 'Congraph\Contracts\OAuth2\UserRepositoryContract'
 		);
 
 		$this->app->alias(
-			'Cookbook\OAuth2\Repositories\UserRepository', 'Illuminate\Contracts\Auth\UserProvider'
+			'Congraph\OAuth2\Repositories\UserRepository', 'Illuminate\Contracts\Auth\UserProvider'
 		);
 
-		$this->app->singleton('Cookbook\OAuth2\Repositories\ScopeRepository', function($app) {
+		$this->app->singleton('Congraph\OAuth2\Repositories\ScopeRepository', function($app) {
 			return new ScopeRepository(
 				$app['db']->connection()
 			);
@@ -118,13 +118,13 @@ class RepositoriesServiceProvider extends ServiceProvider {
 	protected function mapObjectResolvers()
 	{
 		$mappings = [
-			'client' => 'Cookbook\OAuth2\Repositories\ClientRepository',
-			'role' => 'Cookbook\OAuth2\Repositories\RoleRepository',
-			'user' => 'Cookbook\Users\Repositories\UserRepository',
-			'scope' => 'Cookbook\Users\Repositories\ScopeRepository',
+			'client' => 'Congraph\OAuth2\Repositories\ClientRepository',
+			'role' => 'Congraph\OAuth2\Repositories\RoleRepository',
+			'user' => 'Congraph\Users\Repositories\UserRepository',
+			'scope' => 'Congraph\Users\Repositories\ScopeRepository',
 		];
 
-		$this->app->make('Cookbook\Contracts\Core\ObjectResolverContract')->maps($mappings);
+		$this->app->make('Congraph\Contracts\Core\ObjectResolverContract')->maps($mappings);
 	}
 
 	/**
@@ -137,7 +137,7 @@ class RepositoriesServiceProvider extends ServiceProvider {
 		$app = $this->app;
 		$auth = $this->app['auth'];
 		$auth->extend('repository', function() use( $app ){
-			return $app['Cookbook\Contracts\OAuth2\UserRepositoryContract'];
+			return $app['Congraph\Contracts\OAuth2\UserRepositoryContract'];
 		});
 	}
 
@@ -149,12 +149,12 @@ class RepositoriesServiceProvider extends ServiceProvider {
 	public function provides()
 	{
 		return [
-			'Cookbook\OAuth2\Repositories\ClientRepository',
-			'Cookbook\Contracts\OAuth2\ClientRepositoryContract',
-			'Cookbook\OAuth2\Repositories\RoleRepository',
-			'Cookbook\Contracts\OAuth2\RoleRepositoryContract',
-			'Cookbook\Users\Repositories\UserRepository',
-			'Cookbook\Contracts\Users\UserRepositoryContract',
+			'Congraph\OAuth2\Repositories\ClientRepository',
+			'Congraph\Contracts\OAuth2\ClientRepositoryContract',
+			'Congraph\OAuth2\Repositories\RoleRepository',
+			'Congraph\Contracts\OAuth2\RoleRepositoryContract',
+			'Congraph\Users\Repositories\UserRepository',
+			'Congraph\Contracts\Users\UserRepositoryContract',
 		];
 	}
 

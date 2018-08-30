@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the cookbook/oauth-2 package.
+ * This file is part of the congraph/oauth-2 package.
  *
  * (c) Nikola Plavšić <nikolaplavsic@gmail.com>
  *
@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Cookbook\OAuth2\Repositories;
+namespace Congraph\OAuth2\Repositories;
 
 use Carbon\Carbon;
-use Cookbook\Core\Exceptions\NotFoundException;
-use Cookbook\Core\Facades\Trunk;
-use Cookbook\Core\Repositories\Model;
+use Congraph\Core\Exceptions\NotFoundException;
+use Congraph\Core\Facades\Trunk;
+use Congraph\Core\Repositories\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 /**
@@ -22,11 +22,11 @@ use Illuminate\Contracts\Auth\Authenticatable;
  * Model for user transfer objects
  *
  * @uses   		Illuminate\Database\Connection
- * @uses   		Cookbook\Core\Repository\AbstractRepository
+ * @uses   		Congraph\Core\Repository\AbstractRepository
  *
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @copyright  	Nikola Plavšić <nikolaplavsic@gmail.com>
- * @package 	cookbook/oauth-2
+ * @package 	congraph/oauth-2
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */

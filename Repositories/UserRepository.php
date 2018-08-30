@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the cookbook/oauth-2 package.
+ * This file is part of the congraph/oauth-2 package.
  *
  * (c) Nikola Plavšić <nikolaplavsic@gmail.com>
  *
@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Cookbook\OAuth2\Repositories;
+namespace Congraph\OAuth2\Repositories;
 
 use Carbon\Carbon;
-use Cookbook\Contracts\OAuth2\UserRepositoryContract;
-use Cookbook\Core\Exceptions\Exception;
-use Cookbook\Core\Exceptions\NotFoundException;
-use Cookbook\Core\Facades\Trunk;
-use Cookbook\Core\Repositories\AbstractRepository;
-use Cookbook\Core\Repositories\Collection;
-use Cookbook\Core\Repositories\Model;
-use Cookbook\Core\Repositories\UsesCache;
+use Congraph\Contracts\OAuth2\UserRepositoryContract;
+use Congraph\Core\Exceptions\Exception;
+use Congraph\Core\Exceptions\NotFoundException;
+use Congraph\Core\Facades\Trunk;
+use Congraph\Core\Repositories\AbstractRepository;
+use Congraph\Core\Repositories\Collection;
+use Congraph\Core\Repositories\Model;
+use Congraph\Core\Repositories\UsesCache;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Database\Connection;
@@ -33,11 +33,11 @@ use stdClass;
  * Repository for user database queries
  *
  * @uses   		Illuminate\Database\Connection
- * @uses   		Cookbook\Core\Repository\AbstractRepository
+ * @uses   		Congraph\Core\Repository\AbstractRepository
  *
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @copyright  	Nikola Plavšić <nikolaplavsic@gmail.com>
- * @package 	cookbook/oauth-2
+ * @package 	congraph/oauth-2
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */
@@ -134,7 +134,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
 	 *
 	 * @return mixed
 	 *
-	 * @throws Cookbook\Core\Exceptions\NotFoundException
+	 * @throws Congraph\Core\Exceptions\NotFoundException
 	 */
 	protected function _update($id, $model)
 	{
@@ -213,7 +213,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
 	 *
 	 * @return mixed
 	 *
-	 * @throws Cookbook\Core\Exceptions\NotFoundException
+	 * @throws Congraph\Core\Exceptions\NotFoundException
 	 */
 	public function changePassword($id, $password)
 	{
@@ -243,7 +243,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryContrac
 	 *
 	 * @return boolean
 	 *
-	 * @throws Cookbook\Core\Exceptions\NotFoundException
+	 * @throws Congraph\Core\Exceptions\NotFoundException
 	 */
 	protected function _delete($id)
 	{

@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the cookbook/oauth-2 package.
+ * This file is part of the congraph/oauth-2 package.
  *
  * (c) Nikola Plavšić <nikolaplavsic@gmail.com>
  *
@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Cookbook\OAuth2\Handlers\Commands\Users;
+namespace Congraph\OAuth2\Handlers\Commands\Users;
 
 
-// use Cookbook\Contracts\OAuth2\ConsumerRepositoryContract;
-use Cookbook\Contracts\OAuth2\UserRepositoryContract;
-use Cookbook\Core\Bus\RepositoryCommand;
-use Cookbook\Core\Bus\RepositoryCommandHandler;
+// use Congraph\Contracts\OAuth2\ConsumerRepositoryContract;
+use Congraph\Contracts\OAuth2\UserRepositoryContract;
+use Congraph\Core\Bus\RepositoryCommand;
+use Congraph\Core\Bus\RepositoryCommandHandler;
 
 /**
  * UserDeleteHandler class
@@ -24,7 +24,7 @@ use Cookbook\Core\Bus\RepositoryCommandHandler;
  * 
  * @author  	Nikola Plavšić <nikolaplavsic@gmail.com>
  * @copyright  	Nikola Plavšić <nikolaplavsic@gmail.com>
- * @package 	cookbook/oauth-2
+ * @package 	congraph/oauth-2
  * @since 		0.1.0-alpha
  * @version  	0.1.0-alpha
  */
@@ -33,14 +33,14 @@ class UserDeleteHandler extends RepositoryCommandHandler
 	/**
 	 * Repository for handling consumers
 	 * 
-	 * @var \Cookbook\Contracts\OAuth2\ConsumerRepositoryContract
+	 * @var \Congraph\Contracts\OAuth2\ConsumerRepositoryContract
 	 */
 	// protected $consumerRepository;
 
 	/**
 	 * Create new UserDeleteHandler
 	 * 
-	 * @param Cookbook\Contracts\OAuth2\UserRepositoryContract $repository
+	 * @param Congraph\Contracts\OAuth2\UserRepositoryContract $repository
 	 * 
 	 * @return void
 	 */
@@ -54,7 +54,7 @@ class UserDeleteHandler extends RepositoryCommandHandler
 	/**
 	 * Handle RepositoryCommand
 	 * 
-	 * @param Cookbook\Core\Bus\RepositoryCommand $command
+	 * @param Congraph\Core\Bus\RepositoryCommand $command
 	 * 
 	 * @return void
 	 */

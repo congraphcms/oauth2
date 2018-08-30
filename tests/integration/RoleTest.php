@@ -23,7 +23,7 @@ class RoleTest extends Orchestra\Testbench\TestCase
 
 		// $this->artisan('migrate', [
 		// 	'--database' => 'testbench',
-		// 	'--realpath' => realpath(__DIR__.'/../../vendor/cookbook/users/database/migrations'),
+		// 	'--realpath' => realpath(__DIR__.'/../../vendor/congraph/users/database/migrations'),
 		// ]);
 
 		$this->artisan('migrate', [
@@ -71,7 +71,7 @@ class RoleTest extends Orchestra\Testbench\TestCase
 			'driver'   	=> 'mysql',
 			'host'      => '127.0.0.1',
 			'port'		=> '3306',
-			'database'	=> 'cookbook_testbench',
+			'database'	=> 'congraph_testbench',
 			'username'  => 'root',
 			'password'  => '',
 			'charset'   => 'utf8',
@@ -86,9 +86,9 @@ class RoleTest extends Orchestra\Testbench\TestCase
 		return [
 			'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
 			'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider',
-			'Cookbook\OAuth2\OAuth2ServiceProvider',
-			// 'Cookbook\Users\UsersServiceProvider', 
-			'Cookbook\Core\CoreServiceProvider',
+			'Congraph\OAuth2\OAuth2ServiceProvider',
+			// 'Congraph\Users\UsersServiceProvider', 
+			'Congraph\Core\CoreServiceProvider',
 		];
 	}
 
@@ -106,7 +106,7 @@ class RoleTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleCreateCommand($params));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Roles\RoleCreateCommand($params));
 
 		$this->d->dump($result->toArray());
 		$this->assertEquals('Project Manager', $result->name);
@@ -128,9 +128,9 @@ class RoleTest extends Orchestra\Testbench\TestCase
 			'scopes' => ['manage_content_model']
 		];
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleUpdateCommand($params, 2));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Roles\RoleUpdateCommand($params, 2));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Model);
 		$this->assertEquals(2, $result->id);
 		$this->assertEquals('Content Editor', $result->name);
 		$this->assertEquals(['manage_content_model'], $result->scopes);
@@ -150,7 +150,7 @@ class RoleTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleDeleteCommand([], 3));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Roles\RoleDeleteCommand([], 3));
 
 		$this->assertEquals(3, $result);
 		$this->d->dump($result);
@@ -159,7 +159,7 @@ class RoleTest extends Orchestra\Testbench\TestCase
 	}
 
 	/**
-	 * @expectedException \Cookbook\Core\Exceptions\NotFoundException
+	 * @expectedException \Congraph\Core\Exceptions\NotFoundException
 	 */
 	public function testDeleteException()
 	{
@@ -168,7 +168,7 @@ class RoleTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleDeleteCommand([], 123));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Roles\RoleDeleteCommand([], 123));
 	}
 
 	public function testFetchRole()
@@ -179,9 +179,9 @@ class RoleTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleFetchCommand([], 3));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Roles\RoleFetchCommand([], 3));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Model);
 		$this->assertEquals(3, $result->id);
 		$this->assertEquals('Developer', $result->name);
 		$this->assertEquals(['manage_clients'], $result->scopes);
@@ -197,9 +197,9 @@ class RoleTest extends Orchestra\Testbench\TestCase
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Roles\RoleGetCommand([]));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Roles\RoleGetCommand([]));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Collection);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Collection);
 		$this->assertEquals(count($result), 3);
 		$this->d->dump($result->toArray());
 

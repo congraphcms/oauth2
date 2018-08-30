@@ -22,7 +22,7 @@ class ClientTest extends Orchestra\Testbench\TestCase
 
 		// $this->artisan('migrate', [
 		// 	'--database' => 'testbench',
-		// 	'--realpath' => realpath(__DIR__.'/../../vendor/cookbook/users/database/migrations'),
+		// 	'--realpath' => realpath(__DIR__.'/../../vendor/congraph/users/database/migrations'),
 		// ]);
 
 		$this->artisan('db:seed', [
@@ -62,7 +62,7 @@ class ClientTest extends Orchestra\Testbench\TestCase
 			'driver'   	=> 'mysql',
 			'host'      => '127.0.0.1',
 			'port'		=> '3306',
-			'database'	=> 'cookbook_testbench',
+			'database'	=> 'congraph_testbench',
 			'username'  => 'root',
 			'password'  => '',
 			'charset'   => 'utf8',
@@ -75,9 +75,9 @@ class ClientTest extends Orchestra\Testbench\TestCase
 	protected function getPackageProviders($app)
 	{
 		return [
-			'Cookbook\OAuth2\OAuth2ServiceProvider',
-			// 'Cookbook\Users\UsersServiceProvider', 
-			'Cookbook\Core\CoreServiceProvider',
+			'Congraph\OAuth2\OAuth2ServiceProvider',
+			// 'Congraph\Users\UsersServiceProvider', 
+			'Congraph\Core\CoreServiceProvider',
 			'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
 			'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider'
 		];
@@ -97,7 +97,7 @@ class ClientTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientCreateCommand($params));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Clients\ClientCreateCommand($params));
 
 		$this->d->dump($result->toArray());
 		$this->assertEquals('Jane\'s Mobile App', $result->name);
@@ -123,9 +123,9 @@ class ClientTest extends Orchestra\Testbench\TestCase
 			'grants' => ['client_credentials']
 		];
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientUpdateCommand($params, 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Clients\ClientUpdateCommand($params, 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Model);
 		$this->assertTrue(is_string($result->id));
 		$this->assertEquals('iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR', $result->id);
 		$this->assertEquals('Margaret\'s App', $result->name);
@@ -147,7 +147,7 @@ class ClientTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientDeleteCommand([], 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Clients\ClientDeleteCommand([], 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
 
 		$this->assertEquals('iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR', $result);
 		$this->d->dump($result);
@@ -155,7 +155,7 @@ class ClientTest extends Orchestra\Testbench\TestCase
 	}
 
 	/**
-	 * @expectedException \Cookbook\Core\Exceptions\NotFoundException
+	 * @expectedException \Congraph\Core\Exceptions\NotFoundException
 	 */
 	public function testDeleteException()
 	{
@@ -164,7 +164,7 @@ class ClientTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientDeleteCommand([], '123'));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Clients\ClientDeleteCommand([], '123'));
 	}
 
 	public function testFetchClient()
@@ -175,9 +175,9 @@ class ClientTest extends Orchestra\Testbench\TestCase
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
 
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientFetchCommand([], 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Clients\ClientFetchCommand([], 'iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR'));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Model);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Model);
 		$this->assertTrue(is_string($result->id));
 		$this->assertEquals('iuqp7E9myPGkoKuyvI9Jo06gIor2WsiivuUbuobR', $result->id);
 		$this->assertEquals('Test Client', $result->name);
@@ -193,9 +193,9 @@ class ClientTest extends Orchestra\Testbench\TestCase
 
 		$app = $this->createApplication();
 		$bus = $app->make('Illuminate\Contracts\Bus\Dispatcher');
-		$result = $bus->dispatch( new Cookbook\OAuth2\Commands\Clients\ClientGetCommand([]));
+		$result = $bus->dispatch( new Congraph\OAuth2\Commands\Clients\ClientGetCommand([]));
 
-		$this->assertTrue($result instanceof Cookbook\Core\Repositories\Collection);
+		$this->assertTrue($result instanceof Congraph\Core\Repositories\Collection);
 		$this->assertEquals(count($result), 1);
 		$this->d->dump($result->toArray());
 
